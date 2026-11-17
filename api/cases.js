@@ -21,9 +21,15 @@ export default async function handler(req, res) {
   }
 
   try {
-    const urlObj = new URL(req.url || '/api/cases', 'http://localhost');
-    const limit = Number(urlObj.searchParams.get('limit') || 8);
-    const scamType = (urlObj.searchParams.get('scamType') || '').trim();
+    let limit = 8;
+    let scamType = '';
+    try {
+      const urlObj = new URL(req.url || '/api/cases', 'http://localhost');
+      limit = Number(urlObj.searchParams.get('limit') || 8);
+      scamType = (urlObj.searchParams.get('scamType') || '').trim();
+    } catch {
+      // 잘못된 URL 형식일 때 기본 조회 파라미터 사용
+    }
 
     const result = await listStoredCases({ limit, scamType });
 

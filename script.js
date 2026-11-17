@@ -1095,6 +1095,40 @@ function buildBackupAnalyzeResult(inputText) {
 }
 
 /**
+ * 서버 응답 본문을 안전하게 JSON으로 파싱합니다.
+ * Vercel 게이트웨이 오류(413, 502, 504 등)로 HTML/텍스트가 반환돼도 SyntaxError 대신 명확한 안내를 제공합니다.
+ * @param {Response} response fetch 응답 객체
+ * @returns {Promise<object>} 파싱된 JSON 객체
+ */
+async function safeParseResponseJson(response) {
+  const raw = await response.text().catch(() => '');
+  if (!raw) {
+    return {
+      ok: false,
+      message:
+        response.status === 413
+          ? '첨부 이미지 용량이 서버 허용 한도를 초과했습니다. 더 작은 이미지를 선택해 주세요.'
+          : response.status === 504
+            ? 'AI 분석 응답 시간이 초과되었습니다. 잠시 후 다시 시도해 주세요.'
+            : `서버 응답이 비어 있습니다(${response.status}).`
+    };
+  }
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return {
+      ok: false,
+      message:
+        response.status === 413
+          ? '첨부 이미지 용량이 너무 큽니다. 이미지 크기를 줄여 다시 시도해 주세요.'
+          : response.status === 504
+            ? '서버 처리 시간이 초과되었습니다(504). 잠시 후 다시 시도해 주세요.'
+            : `서버 응답을 해석할 수 없습니다(${response.status}).`
+    };
+  }
+}
+
+/**
  * /api/analyze 엔드포인트를 호출해 문자·이미지 스미싱 위험도를 분석합니다.
  */
 async function runAnalyze() {
@@ -1132,7 +1166,7 @@ async function runAnalyze() {
       })
     });
 
-    const data = await response.json();
+    const data = await safeParseResponseJson(response);
     if (!response.ok || !data.ok) {
       throw new Error(data.message || '서버에서 분석 응답을 받지 못했습니다.');
     }
@@ -1281,7 +1315,7 @@ async function generateTrainingScenario(overrideType) {
       body: JSON.stringify({ scamType, difficulty })
     });
 
-    const data = await response.json();
+    const data = await safeParseResponseJson(response);
     if (!response.ok || !data.ok) {
       throw new Error(data.message || '가상 문자 생성 중 오류가 발생했습니다.');
     }
@@ -1457,6 +1491,48 @@ async function loadKnowledgeCases() {
 }
 
 /**
+ * Vercel 서버리스 요청 크기 제한(4.5MB)을 넘기지 않도록 대용량 캡처 이미지를 브라우저에서 안전하게 축소합니다.
+ * @param {string} dataUrl 원본 이미지 Data URL
+ * @returns {Promise<string>} 최적화된 Data URL
+ */
+function compressImageDataUrlIfNeeded(dataUrl) {
+  return new Promise((resolve) => {
+    if (!dataUrl || dataUrl.length < 1_600_000 || typeof Image === 'undefined') {
+      resolve(dataUrl);
+      return;
+    }
+
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const maxDim = 1600;
+        const scale = Math.min(1, maxDim / Math.max(img.width || 1, img.height || 1));
+        const width = Math.max(1, Math.round((img.width || 800) * scale));
+        const height = Math.max(1, Math.round((img.height || 800) * scale));
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          resolve(dataUrl);
+          return;
+        }
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, width, height);
+        ctx.drawImage(img, 0, 0, width, height);
+        const compressed = canvas.toDataURL('image/jpeg', 0.86);
+        resolve(compressed && compressed.length < dataUrl.length ? compressed : dataUrl);
+      } catch {
+        resolve(dataUrl);
+      }
+    };
+    img.onerror = () => resolve(dataUrl);
+    img.src = dataUrl;
+  });
+}
+
+/**
  * 업로드된 이미지 파일을 읽어 미리보기와 DataURL 상태를 설정합니다.
  * @param {File} file 선택된 이미지 파일
  */
@@ -1474,8 +1550,9 @@ function handleImageFile(file) {
   }
 
   const reader = new FileReader();
-  reader.onload = () => {
-    state.selectedImageDataUrl = String(reader.result || '');
+  reader.onload = async () => {
+    const rawDataUrl = String(reader.result || '');
+    state.selectedImageDataUrl = await compressImageDataUrlIfNeeded(rawDataUrl);
     el.imageFileName.textContent = file.name;
     el.imagePreview.src = state.selectedImageDataUrl;
     el.imagePreviewWrap.classList.remove('hidden');
@@ -1770,7 +1847,7 @@ export async function openSignalSampleModal(signalId, signalName) {
       })
     });
 
-    const data = await res.json();
+    const data = await safeParseResponseJson(res);
     if (!res.ok || !data.ok || !data.sample) {
       throw new Error(data?.message || '예시 이미지 생성 실패');
     }

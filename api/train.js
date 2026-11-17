@@ -59,6 +59,7 @@ const TRAIN_SYSTEM_PROMPT = `당신은 한국어 스미싱 예방 교육 시나�
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({
+      ok: false,
       errorCode: 'METHOD_NOT_ALLOWED',
       message: 'POST 요청만 지원합니다.'
     });

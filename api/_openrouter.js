@@ -533,31 +533,53 @@ export async function callOpenRouterJson({
   const maxAttempts = 2;
   const startedAt = Date.now();
   let lastError = null;
+  let useResponseFormat = true;
+  const refererUrl =
+    process.env.APP_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://clickcheck.vercel.app');
 
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 11000);
 
     try {
+      const requestBody = {
+        model: targetModel,
+        messages,
+        temperature,
+        max_tokens: maxTokens
+      };
+      if (useResponseFormat) {
+        requestBody.response_format = { type: 'json_object' };
+      }
+
       const response = await fetch(OPENROUTER_API_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${apiKey}`,
-          'HTTP-Referer': process.env.APP_URL || 'https://clickcheck.vercel.app',
+          'HTTP-Referer': refererUrl,
           'X-Title': 'ClickCheck'
         },
-        body: JSON.stringify({
-          model: targetModel,
-          messages,
-          temperature,
-          max_tokens: maxTokens,
-          response_format: { type: 'json_object' }
-        }),
+        body: JSON.stringify(requestBody),
         signal: controller.signal
       });
 
       clearTimeout(timeoutId);
+
+      // 일부 무료 공급자가 response_format(json_object)을 400으로 거부하면 제거 후 1회 재시도
+      if (response.status === 400 && useResponseFormat && attempt < maxAttempts) {
+        const errBody = await response.text().catch(() => '');
+        if (/response_format|json_object|structured/i.test(errBody)) {
+          useResponseFormat = false;
+          continue;
+        }
+        const badReqErr = new Error(`OpenRouter 요청 형식이 거부되었습니다(400).`);
+        badReqErr.statusCode = 400;
+        badReqErr.errorCode = 'BAD_REQUEST';
+        badReqErr.detail = errBody.slice(0, 300);
+        throw badReqErr;
+      }
 
       // 요청 제한(429) 또는 일시 장애(5xx) 시 재시도
       if (response.status === 429 || response.status >= 500) {

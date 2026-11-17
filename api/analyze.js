@@ -71,6 +71,7 @@ const ANALYZE_SYSTEM_PROMPT = `당신은 한국어 스미싱·보이스피싱 �
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({
+      ok: false,
       errorCode: 'METHOD_NOT_ALLOWED',
       message: 'POST 요청만 지원합니다.'
     });
@@ -87,6 +88,7 @@ export default async function handler(req, res) {
     // 텍스트와 이미지가 모두 비어 있으면 400 오류 반환
     if (!text && !imageDataUrl) {
       return res.status(400).json({
+        ok: false,
         errorCode: 'EMPTY_INPUT',
         message: '분석할 문자 내용을 입력하거나 문자 캡처 이미지를 첨부해 주세요.'
       });
@@ -95,6 +97,7 @@ export default async function handler(req, res) {
     // 과도한 입력 길이 방지
     if (text.length > 3000) {
       return res.status(400).json({
+        ok: false,
         errorCode: 'TEXT_TOO_LONG',
         message: '문자 내용은 3,000자 이하로 입력해 주세요.'
       });
@@ -103,6 +106,7 @@ export default async function handler(req, res) {
     // 이미지 형식 간단 검증 (data:image/* 형식만 허용)
     if (imageDataUrl && !/^data:image\/(png|jpeg|jpg|webp|gif);base64,/i.test(imageDataUrl)) {
       return res.status(400).json({
+        ok: false,
         errorCode: 'INVALID_IMAGE',
         message: 'PNG, JPG, WEBP 형식의 이미지 파일만 분석할 수 있습니다.'
       });

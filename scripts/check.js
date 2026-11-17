@@ -55,7 +55,22 @@ for (const relPath of jsFiles) {
   }
 }
 
-// 3. 클라이언트 코드(script.js)에 OpenRouter·Supabase 서버 키/직접 호출이 섞이지 않았는지 점검
+// 3. 주요 JSON 설정 파일 구문 검증 (Vercel 빌드 오류 사전 차단)
+for (const jsonRelPath of ['package.json', 'vercel.json', 'metadata.json']) {
+  const jsonFullPath = path.join(rootDir, jsonRelPath);
+  if (!fs.existsSync(jsonFullPath)) {
+    console.error(`[검증 실패] 설정 파일이 없습니다: ${jsonRelPath}`);
+    process.exit(1);
+  }
+  try {
+    JSON.parse(fs.readFileSync(jsonFullPath, 'utf8'));
+  } catch (err) {
+    console.error(`[검증 실패] JSON 구문 오류(${jsonRelPath}): ${err.message}`);
+    process.exit(1);
+  }
+}
+
+// 4. 클라이언트 코드(script.js)에 OpenRouter·Supabase 서버 키/직접 호출이 섞이지 않았는지 점검
 const clientCode = fs.readFileSync(path.join(rootDir, 'script.js'), 'utf8');
 if (
   clientCode.includes('openrouter.ai') ||
@@ -66,5 +81,5 @@ if (
   process.exit(1);
 }
 
-console.log('[검증 통과] 순수 HTML/CSS/JS 및 Vercel 서버리스 API 구문 검사를 완료했습니다.');
+console.log('[검증 통과] 순수 HTML/CSS/JS, JSON 설정 및 Vercel 서버리스 API 구문 검사를 완료했습니다.');
 
