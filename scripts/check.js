@@ -15,7 +15,7 @@ const requiredFiles = [
   'index.html',
   'style.css',
   'script.js',
-  'server.js',
+  'scripts/local-server.js',
   'api/_openrouter.js',
   'api/analyze.js',
   'api/train.js',
@@ -25,7 +25,7 @@ const requiredFiles = [
 // 문법 검사를 수행할 JS 파일 목록
 const jsFiles = [
   'script.js',
-  'server.js',
+  'scripts/local-server.js',
   'api/_openrouter.js',
   'api/analyze.js',
   'api/train.js',

@@ -1,7 +1,7 @@
 /**
  * 로컬 개발 및 프리뷰 실행용 순수 Node.js HTTP 서버입니다.
- * - 프레임워크나 빌드 도구 없이 정적 파일(index.html, style.css, script.js)과
- *   Vercel 서버리스 함수(api/*.js)를 포트 3000에서 함께 서빙합니다.
+ * - Vercel 배포 환경에서는 Vercel CDN이 루트 정적 파일(index.html, style.css, script.js)을 직접 서빙하고
+ *   api/*.js를 서버리스 함수로 실행하므로, 이 파일은 scripts/ 폴더에 두어 Vercel 서버 자동 감지를 피합니다.
  */
 
 import http from 'node:http';
@@ -9,13 +9,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import analyzeHandler from './api/analyze.js';
-import trainHandler from './api/train.js';
-import healthHandler from './api/health.js';
+import analyzeHandler from '../api/analyze.js';
+import trainHandler from '../api/train.js';
+import healthHandler from '../api/health.js';
 
 // 현재 파일 기준 프로젝트 루트 경로 계산
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const rootDir = path.resolve(__dirname, '..');
 
 /**
  * .env.local 및 .env 파일을 읽어 process.env에 주입합니다.
@@ -24,7 +25,7 @@ const __dirname = path.dirname(__filename);
 function loadLocalEnvFiles() {
   const envFiles = ['.env.local', '.env'];
   for (const filename of envFiles) {
-    const filePath = path.join(__dirname, filename);
+    const filePath = path.join(rootDir, filename);
     if (!fs.existsSync(filePath)) continue;
 
     const lines = fs.readFileSync(filePath, 'utf8').split(/\r?\n/);
@@ -88,7 +89,7 @@ function adaptVercelResponse(res) {
 }
 
 /**
- * HTTP 요청을 라우팅하는 메인 서버 생성
+ * HTTP 요청을 라우팅하는 로컬 개발 서버 생성
  */
 const server = http.createServer(async (req, res) => {
   const urlObj = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`);
@@ -105,8 +106,8 @@ const server = http.createServer(async (req, res) => {
     return healthHandler(req, adaptVercelResponse(res));
   }
 
-  // 2. 정적 파일 서빙 (보안상 .env, api/, server.js, scripts/ 직접 접근 차단)
-  const blockedPrefixes = ['/api/', '/scripts/', '/tests/', '/.env', '/server.js', '/package.json'];
+  // 2. 정적 파일 서빙 (보안상 .env, api/, scripts/ 직접 접근 차단)
+  const blockedPrefixes = ['/api/', '/scripts/', '/tests/', '/.env', '/package.json'];
   if (blockedPrefixes.some((prefix) => pathname.startsWith(prefix))) {
     res.statusCode = 403;
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
@@ -114,10 +115,13 @@ const server = http.createServer(async (req, res) => {
   }
 
   const targetRelPath = pathname === '/' ? 'index.html' : pathname.replace(/^\/+/, '');
-  const resolvedPath = path.resolve(__dirname, targetRelPath);
+  const resolvedPath = path.resolve(rootDir, targetRelPath);
 
   // 디렉터리 탈출 공격(Path Traversal) 방지
-  if (!resolvedPath.startsWith(__dirname + path.sep) && resolvedPath !== path.join(__dirname, 'index.html')) {
+  if (
+    !resolvedPath.startsWith(rootDir + path.sep) &&
+    resolvedPath !== path.join(rootDir, 'index.html')
+  ) {
     res.statusCode = 403;
     return res.end('잘못된 경로입니다.');
   }

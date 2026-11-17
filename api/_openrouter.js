@@ -58,7 +58,9 @@ const MAX_CACHE_ENTRIES = 200;
  * @returns {string} 모델 슬러그
  */
 export function getOpenRouterModel() {
-  const configured = (process.env.OPENROUTER_MODEL || '').trim();
+  const configured = (process.env.OPENROUTER_MODEL || '')
+    .trim()
+    .replace(/^['"]|['"]$/g, '');
   return configured || DEFAULT_OPENROUTER_MODEL;
 }
 
@@ -471,8 +473,10 @@ export async function callOpenRouterJson({
     }
   }
 
-  // 2. 서버 환경 변수에서 API 키 확인 (브라우저 노출 금지)
-  const apiKey = (process.env.OPENROUTER_API_KEY || '').trim();
+  // 2. 서버 환경 변수에서 API 키 확인 (브라우저 노출 금지, 실수로 들어간 앞뒤 따옴표 제거)
+  const apiKey = (process.env.OPENROUTER_API_KEY || '')
+    .trim()
+    .replace(/^['"]|['"]$/g, '');
   if (!apiKey) {
     const err = new Error(
       'OPENROUTER_API_KEY가 설정되지 않았습니다. .env.local 또는 배포 환경 변수에 키를 등록해 주세요.'
@@ -534,7 +538,11 @@ export async function callOpenRouterJson({
 
       if (!response.ok) {
         const errBody = await response.text().catch(() => '');
-        const fatalErr = new Error(`OpenRouter 요청이 거부되었습니다(${response.status}).`);
+        const fatalErr = new Error(
+          response.status === 401
+            ? 'OpenRouter API 키 인증에 실패했습니다(401). 키가 폐기·만료되었거나 앞뒤 공백·따옴표가 들어갔는지 확인해 주세요.'
+            : `OpenRouter 요청이 거부되었습니다(${response.status}).`
+        );
         fatalErr.statusCode = response.status === 401 ? 401 : 502;
         fatalErr.errorCode = response.status === 401 ? 'INVALID_API_KEY' : 'UPSTREAM_REJECTED';
         fatalErr.detail = errBody.slice(0, 300);

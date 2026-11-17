@@ -1,5 +1,9 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
+  "framework": null,
+  "buildCommand": "node scripts/check.js",
+  "outputDirectory": ".",
   "functions": {
     "api/*.js": {
       "maxDuration": 30
