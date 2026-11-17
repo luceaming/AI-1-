@@ -908,9 +908,9 @@ function handleImageFile(file) {
     el.analyzeErrorMsg.textContent = 'PNG, JPG, WEBP 형식의 이미지 파일만 첨부할 수 있습니다.';
     return;
   }
-  if (file.size > 4 * 1024 * 1024) {
+  if (file.size > 3 * 1024 * 1024) {
     setAnalyzeViewState('error');
-    el.analyzeErrorMsg.textContent = '이미지 파일 크기는 4MB 이하만 업로드할 수 있습니다.';
+    el.analyzeErrorMsg.textContent = '이미지 파일 크기는 3MB 이하만 업로드할 수 있습니다.';
     return;
   }
 

@@ -7,6 +7,7 @@
 import crypto from 'node:crypto';
 import {
   callOpenRouterJson,
+  parseJsonBody,
   validateAndNormalizeAnalyzeResult
 } from './_openrouter.js';
 
@@ -53,24 +54,7 @@ const ANALYZE_SYSTEM_PROMPT = `당신은 한국어 스미싱·보이스피싱 �
 주의: signals[].text는 반드시 입력 원문에 그대로 들어있는 정확한 문자열이어야 합니다.`;
 
 /**
- * 요청 본문을 JSON으로 안전하게 파싱합니다.
- * @param {object} req HTTP 요청 객체
- * @returns {Promise<object>} 파싱된 본문 객체
- */
-async function parseRequestBody(req) {
-  if (req.body && typeof req.body === 'object') {
-    return req.body;
-  }
-  const chunks = [];
-  for await (const chunk of req) {
-    chunks.push(chunk);
-  }
-  const raw = Buffer.concat(chunks).toString('utf8').trim();
-  return raw ? JSON.parse(raw) : {};
-}
-
-/**
- * Vercel 서버리스 핸들러 함수
+ * Vercel 서버리스 핸들러 함수 (/api/analyze)
  * @param {object} req HTTP 요청
  * @param {object} res HTTP 응답
  */
@@ -83,7 +67,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const body = await parseRequestBody(req);
+    const body = await parseJsonBody(req);
     const text = typeof body?.text === 'string' ? body.text.trim() : '';
     const imageDataUrl =
       typeof body?.imageDataUrl === 'string' ? body.imageDataUrl.trim() : '';

@@ -65,6 +65,46 @@ export function getOpenRouterModel() {
 }
 
 /**
+ * Vercel 서버리스 및 로컬 Node 환경 모두에서 요청 본문(JSON)을 안전하게 파싱합니다.
+ * @param {object} req HTTP 요청 객체
+ * @returns {Promise<object>} 파싱된 JSON 객체
+ */
+export async function parseJsonBody(req) {
+  if (req.body !== undefined && req.body !== null) {
+    if (typeof req.body === 'object' && !Buffer.isBuffer(req.body)) {
+      return req.body;
+    }
+    const textBody = Buffer.isBuffer(req.body)
+      ? req.body.toString('utf8').trim()
+      : String(req.body).trim();
+    if (!textBody) return {};
+    try {
+      return JSON.parse(textBody);
+    } catch {
+      const err = new Error('요청 JSON 형식이 올바르지 않습니다.');
+      err.statusCode = 400;
+      err.errorCode = 'INVALID_JSON';
+      throw err;
+    }
+  }
+
+  const chunks = [];
+  for await (const chunk of req) {
+    chunks.push(chunk);
+  }
+  const raw = Buffer.concat(chunks).toString('utf8').trim();
+  if (!raw) return {};
+  try {
+    return JSON.parse(raw);
+  } catch {
+    const err = new Error('요청 JSON 형식이 올바르지 않습니다.');
+    err.statusCode = 400;
+    err.errorCode = 'INVALID_JSON';
+    throw err;
+  }
+}
+
+/**
  * 캐시에서 유효한 응답을 조회합니다.
  * @param {string} key 캐시 키
  * @returns {any|null} 캐시된 데이터 또는 null
@@ -487,13 +527,14 @@ export async function callOpenRouterJson({
   }
 
   const model = getOpenRouterModel();
-  const maxAttempts = 3;
+  // Vercel maxDuration(30초) 안에 안정적으로 응답/오류를 반환할 수 있도록 시도 횟수·타임아웃 조정
+  const maxAttempts = 2;
   const startedAt = Date.now();
   let lastError = null;
 
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 18000);
+    const timeoutId = setTimeout(() => controller.abort(), 11000);
 
     try {
       const response = await fetch(OPENROUTER_API_URL, {

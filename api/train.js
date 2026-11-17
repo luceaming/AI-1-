@@ -8,6 +8,7 @@ import {
   TRAIN_DIFFICULTIES,
   TRAIN_SCAM_TYPES,
   callOpenRouterJson,
+  parseJsonBody,
   validateAndNormalizeTrainResult
 } from './_openrouter.js';
 
@@ -45,24 +46,7 @@ const TRAIN_SYSTEM_PROMPT = `당신은 한국어 스미싱 예방 교육 시나�
 }`;
 
 /**
- * 요청 본문을 JSON으로 안전하게 파싱합니다.
- * @param {object} req HTTP 요청 객체
- * @returns {Promise<object>} 파싱된 본문 객체
- */
-async function parseRequestBody(req) {
-  if (req.body && typeof req.body === 'object') {
-    return req.body;
-  }
-  const chunks = [];
-  for await (const chunk of req) {
-    chunks.push(chunk);
-  }
-  const raw = Buffer.concat(chunks).toString('utf8').trim();
-  return raw ? JSON.parse(raw) : {};
-}
-
-/**
- * Vercel 서버리스 핸들러 함수
+ * Vercel 서버리스 핸들러 함수 (/api/train)
  * @param {object} req HTTP 요청
  * @param {object} res HTTP 응답
  */
@@ -75,7 +59,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const body = await parseRequestBody(req);
+    const body = await parseJsonBody(req);
     const scamType =
       typeof body?.scamType === 'string' && TRAIN_SCAM_TYPES.includes(body.scamType)
         ? body.scamType

@@ -5,7 +5,10 @@
   "buildCommand": "node scripts/check.js",
   "outputDirectory": ".",
   "functions": {
-    "api/*.js": {
+    "api/analyze.js": {
+      "maxDuration": 30
+    },
+    "api/train.js": {
       "maxDuration": 30
     }
   }

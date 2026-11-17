@@ -15,7 +15,9 @@ export default async function handler(req, res) {
     return res.status(405).json({ ok: false, message: 'GET 요청만 지원합니다.' });
   }
 
-  const hasApiKey = Boolean((process.env.OPENROUTER_API_KEY || '').trim());
+  const hasApiKey = Boolean(
+    (process.env.OPENROUTER_API_KEY || '').trim().replace(/^['"]|['"]$/g, '')
+  );
 
   return res.status(200).json({
     ok: true,
