@@ -1,0 +1,6 @@
+{
+  "name": "SafeText Trainer",
+  "description": "의심 문자의 위험도와 위험 표현을 하이라이트로 분석하고, 같은 수법의 교육용 가상 문자로 대응을 연습하는 스미싱 판별·훈련 웹앱입니다.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

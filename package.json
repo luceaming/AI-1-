@@ -1,0 +1,13 @@
+{
+  "name": "safetext-trainer",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build": "node scripts/check.js",
+    "lint": "node scripts/check.js",
+    "test": "node --test tests/safetext.test.js"
+  }
+}
