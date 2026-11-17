@@ -1404,8 +1404,23 @@ async function loadKnowledgeCases() {
     const cases = Array.isArray(data.cases) ? data.cases : [];
     el.kbCasesGrid.textContent = '';
 
+    if (data.queryError) {
+      el.kbEmptyMsg?.classList.remove('hidden');
+      const desc = el.kbEmptyMsg?.querySelector('.state-desc');
+      if (desc) {
+        desc.textContent =
+          `Supabase 연결 중 확인이 필요합니다(${data.queryError}). Supabase SQL Editor에서 schema.sql 실행 여부와 서버 환경 변수(URL·서비스 역할 키) 설정을 확인해 주세요.`;
+      }
+      return;
+    }
+
     if (cases.length === 0) {
       el.kbEmptyMsg?.classList.remove('hidden');
+      const desc = el.kbEmptyMsg?.querySelector('.state-desc');
+      if (desc) {
+        desc.textContent =
+          '아직 조건에 맞는 저장 사례가 없습니다. 위 판별 모드에서 문자나 캡처 이미지를 분석하면 비식별 텍스트가 자동으로 축적됩니다.';
+      }
       return;
     }
 

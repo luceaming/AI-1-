@@ -66,3 +66,16 @@ create trigger trg_smishing_cases_updated_at
 -- 브라우저에서 직접 DB에 접근하지 못하도록 차단하며,
 -- Vercel 서버리스 함수(api/*.js)에서 SUPABASE_SERVICE_ROLE_KEY로만 안전하게 접근합니다.
 alter table public.smishing_cases enable row level security;
+
+-- 5. PostgREST API 스키마 캐시 즉시 갱신 및 테이블 생성 확인 결과 출력
+-- (CREATE/ALTER 문만 실행하면 Supabase SQL Editor에 "Success. No rows returned"가 뜨므로
+--  아래 SELECT로 실제 테이블 생성 여부를 표 형태로 바로 확인할 수 있게 합니다.)
+notify pgrst, 'reload schema';
+
+select
+  table_schema,
+  table_name,
+  (select count(*) from public.smishing_cases) as current_row_count
+from information_schema.tables
+where table_schema = 'public'
+  and table_name = 'smishing_cases';
