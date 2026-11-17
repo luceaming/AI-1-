@@ -15,7 +15,20 @@ import {
   sanitizeTrainingText,
   validateAndNormalizeTrainResult
 } from '../api/_openrouter.js';
-import { maskPersonalInfo } from '../script.js';
+import {
+  generateSignalSampleSvg,
+  BACKUP_SIGNAL_SAMPLES,
+  GEMMA_MODEL_SLUG
+} from '../api/signal-sample.js';
+import {
+  maskPersonalInfo,
+  getBackupScenario,
+  BACKUP_TRAINING_SCENARIOS,
+  resetSessionStats,
+  buildSignalSampleSvg,
+  CLIENT_SIGNAL_SAMPLES,
+  state
+} from '../script.js';
 
 test('extractJsonObject는 코드 펜스나 설명 문구가 섞인 모델 응답에서도 JSON을 추출한다', () => {
   const raw = '분석 결과입니다:\n```json\n{"risk_score": 88, "risk_level": "위험"}\n```\n참고하세요.';
@@ -105,4 +118,110 @@ test('maskPersonalInfo는 로컬에서 전화번호와 계좌번호를 마스킹
   assert.equal(masked.includes('3333-01-1234567'), false);
   assert.equal(masked.includes('[전화번호]'), true);
   assert.equal(masked.includes('[계좌번호]'), true);
+});
+
+test('getBackupScenario는 난이도(쉬움, 보통, 어려움)에 따라 각각 다른 가상 문자를 반환한다', () => {
+  const types = ['기관사칭', '택배', '지원금', '지인사칭', '대출'];
+  const difficulties = ['쉬움', '보통', '어려움'];
+
+  for (const scamType of types) {
+    const easyScenario = getBackupScenario(scamType, '쉬움');
+    const normalScenario = getBackupScenario(scamType, '보통');
+    const hardScenario = getBackupScenario(scamType, '어려움');
+
+    // 1. 각 난이도 객체의 difficulty가 요청과 일치하는지 확인
+    assert.equal(easyScenario.difficulty, '쉬움');
+    assert.equal(normalScenario.difficulty, '보통');
+    assert.equal(hardScenario.difficulty, '어려움');
+
+    // 2. 난이도별 가상 문자(message)가 서로 다른 고유한 내용인지 확인
+    assert.notEqual(
+      easyScenario.message,
+      normalScenario.message,
+      `${scamType}: 쉬움과 보통의 문자가 달라야 함`
+    );
+    assert.notEqual(
+      normalScenario.message,
+      hardScenario.message,
+      `${scamType}: 보통과 어려움의 문자가 달라야 함`
+    );
+    assert.notEqual(
+      easyScenario.message,
+      hardScenario.message,
+      `${scamType}: 쉬움과 어려움의 문자가 달라야 함`
+    );
+
+    // 3. 3개 난이도 모두에 대해 signals의 text가 message 본문 안에 온전히 존재하는지 검증
+    for (const diff of difficulties) {
+      const scenario = getBackupScenario(scamType, diff);
+      assert.ok(scenario.signals.length > 0, `${scamType} ${diff} 신호가 최소 1개 이상 존재해야 함`);
+      for (const sig of scenario.signals) {
+        assert.ok(
+          scenario.message.includes(sig.text),
+          `[${scamType}-${diff}] 신호 "${sig.text}"가 본문에 포함되어야 함`
+        );
+      }
+      // choices는 5개 표준 선택지인지 확인
+      assert.equal(scenario.choices.length, 5);
+      // best_choices는 유효한 대응인지 확인
+      assert.ok(scenario.best_choices.length > 0);
+    }
+  }
+});
+
+test('getBackupScenario는 유효하지 않은 유형이나 난이도 요청 시 안전하게 기본값으로 폴백한다', () => {
+  const fallback = getBackupScenario('이상한유형', '외계어');
+  assert.equal(fallback.scam_type, '기관사칭');
+  assert.equal(fallback.difficulty, '보통');
+  assert.ok(fallback.message.length > 0);
+});
+
+test('resetSessionStats는 누적 점수, 정답률, 완료 수를 0으로 초기화한다', () => {
+  // 임의의 점수 데이터 설정
+  state.sessionStats = {
+    score: 80,
+    total: 4,
+    correct: 3
+  };
+
+  resetSessionStats();
+
+  assert.equal(state.sessionStats.score, 0);
+  assert.equal(state.sessionStats.total, 0);
+  assert.equal(state.sessionStats.correct, 0);
+});
+
+test('6대 위험 신호 기준(01~06) 예시 데이터가 모두 정의되어 있고 안전 규칙을 준수한다', () => {
+  assert.equal(GEMMA_MODEL_SLUG, 'google/gemma-4-26b-a4b-it:free');
+  const signalIds = ['01', '02', '03', '04', '05', '06'];
+
+  for (const id of signalIds) {
+    const serverSample = BACKUP_SIGNAL_SAMPLES[id];
+    const clientSample = CLIENT_SIGNAL_SAMPLES[id];
+
+    assert.ok(serverSample, `서버 샘플 ${id}가 존재해야 함`);
+    assert.ok(clientSample, `클라이언트 샘플 ${id}가 존재해야 함`);
+
+    // 안전 규칙 검증: 실제 URL 대신 example.com만 사용
+    assert.ok(
+      serverSample.message.includes('example.com'),
+      `${id} 메시지는 example.com 예약 도메인을 사용해야 함`
+    );
+    assert.equal(
+      serverSample.message.includes('010-'),
+      false,
+      `${id} 메시지에 실제 휴대폰 번호(010-)가 포함되지 않아야 함`
+    );
+
+    // SVG 이미지 생성 검증
+    const svg = generateSignalSampleSvg(serverSample);
+    assert.ok(svg.startsWith('<?xml'), 'SVG는 xml 선언으로 시작해야 함');
+    assert.ok(svg.includes('<svg'), 'SVG 태그가 포함되어야 함');
+    assert.ok(svg.includes('</svg>'), 'SVG 닫는 태그가 포함되어야 함');
+    assert.ok(svg.includes(id), `SVG 내에 신호 ID "${id}"가 포함되어야 함`);
+
+    // 클라이언트 SVG 생성 함수 검증
+    const clientSvg = buildSignalSampleSvg(clientSample);
+    assert.ok(clientSvg.includes('<svg'), '클라이언트 SVG 태그가 포함되어야 함');
+  }
 });

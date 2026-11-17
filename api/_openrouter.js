@@ -498,8 +498,11 @@ export async function callOpenRouterJson({
   messages,
   temperature = 0.2,
   maxTokens = 1400,
-  cacheKey = ''
+  cacheKey = '',
+  model = ''
 }) {
+  const targetModel = model || getOpenRouterModel();
+
   // 1. 캐시 조회
   if (cacheKey) {
     const cached = getCachedResult(cacheKey);
@@ -507,7 +510,7 @@ export async function callOpenRouterJson({
       return {
         data: cached,
         cached: true,
-        model: getOpenRouterModel(),
+        model: targetModel,
         latencyMs: 0
       };
     }
@@ -526,7 +529,6 @@ export async function callOpenRouterJson({
     throw err;
   }
 
-  const model = getOpenRouterModel();
   // Vercel maxDuration(30초) 안에 안정적으로 응답/오류를 반환할 수 있도록 시도 횟수·타임아웃 조정
   const maxAttempts = 2;
   const startedAt = Date.now();
@@ -546,7 +548,7 @@ export async function callOpenRouterJson({
           'X-Title': 'SafeText Trainer'
         },
         body: JSON.stringify({
-          model,
+          model: targetModel,
           messages,
           temperature,
           max_tokens: maxTokens,
@@ -606,7 +608,7 @@ export async function callOpenRouterJson({
       return {
         data: parsed,
         cached: false,
-        model,
+        model: targetModel,
         latencyMs: Date.now() - startedAt
       };
     } catch (error) {

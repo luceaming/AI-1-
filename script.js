@@ -98,137 +98,459 @@ const BACKUP_ANALYZE_RESULTS = {
   }
 };
 
-// 백업용 교육 가상 시나리오 세트 (PRD 5.4 안전 규칙 준수)
-const BACKUP_TRAINING_SCENARIOS = {
+// 백업용 교육 가상 시나리오 세트 (PRD 5.4 안전 규칙 준수: 5개 유형 × 3개 난이도 총 15종)
+export const BACKUP_TRAINING_SCENARIOS = {
   기관사칭: {
-    scam_type: '기관사칭',
-    difficulty: '보통',
-    message:
-      '[○○기관] 귀하의 명의로 개설된 대포통장이 적발되어 긴급 조사가 필요합니다. 사건 확인서 열람: https://example.com/verify (문의: 02-0000-0000)',
-    choices: ['신고하기', '삭제하기', '링크 누르기', '적힌 번호로 전화하기', '가족에게 확인하기'],
-    best_choices: ['신고하기', '삭제하기'],
-    signals: [
-      {
-        text: '[○○기관]',
-        category: '기관사칭',
-        reason: '공공·수사기관을 사칭해 심리적 압박감을 줍니다.'
-      },
-      {
-        text: '긴급 조사가 필요합니다',
-        category: '긴급성',
-        reason: '당황하게 만들어 공식 절차 확인 없이 행동하게 유도합니다.'
-      },
-      {
-        text: 'https://example.com/verify',
-        category: 'URL',
-        reason: '공공기관 문자는 사건 확인용 URL 링크를 보내지 않습니다.'
-      }
-    ],
-    explanation:
-      '수사기관이나 공공기관은 문자로 사건 확인서 링크를 보내지 않습니다. 링크를 누르거나 적힌 번호로 전화하지 말고 삭제 후 118 또는 112에 신고해야 합니다.',
-    easy_explanation:
-      '기관을 사칭한 가짜 문자예요. 주소를 누르거나 전화하지 말고 바로 지우고 신고하세요.'
+    쉬움: {
+      scam_type: '기관사칭',
+      difficulty: '쉬움',
+      message:
+        '[○○기관 긴급공지!!] 귀하명의 대포통장 사기연류 의심. 당일 미확인시 즉각 구속수사 진행됩니다!! 지금바로 사건내역조회: https://example.com/arrest-check (문의: 02-000-0000)',
+      choices: ['신고하기', '삭제하기', '링크 누르기', '적힌 번호로 전화하기', '가족에게 확인하기'],
+      best_choices: ['신고하기', '삭제하기'],
+      signals: [
+        {
+          text: '[○○기관 긴급공지!!]',
+          category: '기관사칭',
+          reason: '기관을 사칭하고 과도한 느낌표를 사용해 극심한 불안감을 조성합니다.'
+        },
+        {
+          text: '당일 미확인시 즉각 구속수사 진행됩니다!!',
+          category: '긴급성',
+          reason: '즉각 구속 등 비상식적이고 극단적인 위협으로 냉정한 판단을 방해합니다.'
+        },
+        {
+          text: 'https://example.com/arrest-check',
+          category: 'URL',
+          reason: '공공기관은 사건 내역 확인용 사설 URL 링크를 문자로 발송하지 않습니다.'
+        }
+      ],
+      explanation:
+        '수사기관이나 공공기관은 문자로 당일 구속을 협박하거나 사건 조회 인터넷 링크를 보내지 않습니다. 링크를 누르거나 적힌 번호로 전화하지 말고 삭제 후 112나 118에 신고하세요.',
+      easy_explanation:
+        '공공기관은 구속하겠다며 링크를 누르라는 문자를 절대 보내지 않아요. 겁먹지 말고 바로 지우세요.'
+    },
+    보통: {
+      scam_type: '기관사칭',
+      difficulty: '보통',
+      message:
+        '[○○기관] 귀하의 명의로 개설된 대포통장이 적발되어 긴급 조사가 필요합니다. 사건 확인서 열람: https://example.com/verify (문의: 02-0000-0000)',
+      choices: ['신고하기', '삭제하기', '링크 누르기', '적힌 번호로 전화하기', '가족에게 확인하기'],
+      best_choices: ['신고하기', '삭제하기'],
+      signals: [
+        {
+          text: '[○○기관]',
+          category: '기관사칭',
+          reason: '공공·수사기관을 사칭해 심리적 압박감을 줍니다.'
+        },
+        {
+          text: '긴급 조사가 필요합니다',
+          category: '긴급성',
+          reason: '당황하게 만들어 공식 절차 확인 없이 행동하게 유도합니다.'
+        },
+        {
+          text: 'https://example.com/verify',
+          category: 'URL',
+          reason: '공공기관 문자는 사건 확인용 URL 링크를 보내지 않습니다.'
+        }
+      ],
+      explanation:
+        '수사기관이나 공공기관은 문자로 사건 확인서 링크를 보내지 않습니다. 링크를 누르거나 적힌 번호로 전화하지 말고 삭제 후 118 또는 112에 신고해야 합니다.',
+      easy_explanation:
+        '기관을 사칭한 가짜 문자예요. 주소를 누르거나 전화하지 말고 바로 지우고 신고하세요.'
+    },
+    어려움: {
+      scam_type: '기관사칭',
+      difficulty: '어려움',
+      message:
+        '[○○기관 알림] 전자고지 본인확인 안내: 귀하 앞으로 발송된 전자문서(교통과태료 미납 고지서)가 도착했습니다. 열람 기한 내 확인: https://example.com/edoc/view (문의: 000-0000-0000)',
+      choices: ['신고하기', '삭제하기', '링크 누르기', '적힌 번호로 전화하기', '가족에게 확인하기'],
+      best_choices: ['신고하기', '삭제하기'],
+      signals: [
+        {
+          text: '[○○기관 알림]',
+          category: '기관사칭',
+          reason: '실제 공공 전자고지 알림 발신처처럼 공문서 양식을 매우 사실적으로 모방합니다.'
+        },
+        {
+          text: '전자문서(교통과태료 미납 고지서)',
+          category: '개인정보요구',
+          reason: '일상적인 행정 고지로 위장해 본인인증 명목의 개인정보·금융정보 입력을 유도합니다.'
+        },
+        {
+          text: 'https://example.com/edoc/view',
+          category: 'URL',
+          reason: '정부 공식 행정망 도메인이 아닌 외부 피싱 페이지 주소입니다.'
+        }
+      ],
+      explanation:
+        '공공기관의 공식 전자문서 알림톡 문체를 완벽히 모방한 신종 스미싱입니다. 오탈자가 없어 속기 쉬우므로 문자 링크 대신 정부24나 경찰청 교통민원24 공식 앱에 직접 접속해 확인해야 합니다.',
+      easy_explanation:
+        '진짜 관공서 고지서처럼 보이는 정교한 가짜예요. 문자의 주소를 누르지 말고 정부 공식 앱에서 직접 확인하세요.'
+    }
   },
   택배: {
-    scam_type: '택배',
-    difficulty: '쉬움',
-    message:
-      '[○○택배] 도로명 주소 불일치로 물품 반송 예정입니다. 오늘 안으로 주소 확인 바랍니다. https://example.com/parcel',
-    choices: ['신고하기', '삭제하기', '링크 누르기', '적힌 번호로 전화하기', '가족에게 확인하기'],
-    best_choices: ['신고하기', '삭제하기'],
-    signals: [
-      {
-        text: '물품 반송 예정',
-        category: '긴급성',
-        reason: '반송 불이익을 내세워 조급한 클릭을 유도합니다.'
-      },
-      {
-        text: 'https://example.com/parcel',
-        category: 'URL',
-        reason: '문자 속 주소 대신 쇼핑몰 공식 앱에서 배송 상태를 확인해야 합니다.'
-      }
-    ],
-    explanation:
-      '주문한 물품이 있더라도 문자 링크로 주소를 수정하면 안 됩니다. 문자는 삭제·신고하고 구매처 앱에서 배송 내역을 확인하세요.',
-    easy_explanation:
-      '택배 문자의 주소는 누르지 마세요. 물건을 산 앱에 직접 들어가서 확인하는 것이 안전해요.'
+    쉬움: {
+      scam_type: '택배',
+      difficulty: '쉬움',
+      message:
+        '[○○택배/배송불가!!] 도로명주소 불일치!! 오늘 18시까지 미확인시 물품 전량폐기 됩니다!! 즉시 주소수정: https://example.com/box-fix',
+      choices: ['신고하기', '삭제하기', '링크 누르기', '적힌 번호로 전화하기', '가족에게 확인하기'],
+      best_choices: ['신고하기', '삭제하기'],
+      signals: [
+        {
+          text: '[○○택배/배송불가!!]',
+          category: '기관사칭',
+          reason: '택배사를 사칭하며 과도한 느낌표로 불안을 유발합니다.'
+        },
+        {
+          text: '오늘 18시까지 미확인시 물품 전량폐기',
+          category: '긴급성',
+          reason: '물품 폐기라는 비상식적 불이익을 내세워 성급한 클릭을 유도합니다.'
+        },
+        {
+          text: 'https://example.com/box-fix',
+          category: 'URL',
+          reason: '택배사는 문자 링크로 주소 수정을 요구하지 않습니다.'
+        }
+      ],
+      explanation:
+        '택배사는 주소 불일치를 이유로 당일 전량 폐기 협박을 하거나 문자로 링크 수정을 요구하지 않습니다. 전형적인 피싱 링크이므로 누르지 마세요.',
+      easy_explanation:
+        '택배를 오늘 바로 버리겠다는 협박 문자는 거짓말이에요. 주소를 누르지 말고 삭제하세요.'
+    },
+    보통: {
+      scam_type: '택배',
+      difficulty: '보통',
+      message:
+        '[○○택배] 도로명 주소 불일치로 물품 반송 예정입니다. 오늘 안으로 주소 확인 바랍니다. https://example.com/parcel',
+      choices: ['신고하기', '삭제하기', '링크 누르기', '적힌 번호로 전화하기', '가족에게 확인하기'],
+      best_choices: ['신고하기', '삭제하기'],
+      signals: [
+        {
+          text: '물품 반송 예정',
+          category: '긴급성',
+          reason: '반송 불이익을 내세워 조급한 클릭을 유도합니다.'
+        },
+        {
+          text: 'https://example.com/parcel',
+          category: 'URL',
+          reason: '문자 속 주소 대신 쇼핑몰 공식 앱에서 배송 상태를 확인해야 합니다.'
+        }
+      ],
+      explanation:
+        '주문한 물품이 있더라도 문자 링크로 주소를 수정하면 안 됩니다. 문자는 삭제·신고하고 구매처 앱에서 배송 내역을 확인하세요.',
+      easy_explanation:
+        '택배 문자의 주소는 누르지 마세요. 물건을 산 앱에 직접 들어가서 확인하는 것이 안전해요.'
+    },
+    어려움: {
+      scam_type: '택배',
+      difficulty: '어려움',
+      message:
+        '[○○로지스] 고객님의 물품(운송장: 000-0000-0000)이 경비실에 위탁 보관되었습니다. 보관함 비밀번호 및 물품 수령 사진 확인: https://example.com/delivery/photo',
+      choices: ['신고하기', '삭제하기', '링크 누르기', '적힌 번호로 전화하기', '가족에게 확인하기'],
+      best_choices: ['신고하기', '삭제하기'],
+      signals: [
+        {
+          text: '[○○로지스]',
+          category: '기관사칭',
+          reason: '실제 택배 배송 완료 안내 문구를 매우 사실적으로 재현했습니다.'
+        },
+        {
+          text: '보관함 비밀번호 및 물품 수령 사진 확인',
+          category: '개인정보요구',
+          reason: '사진 확인을 미끼로 원격제어 악성 앱(APK) 설치 페이지로 유도합니다.'
+        },
+        {
+          text: 'https://example.com/delivery/photo',
+          category: 'URL',
+          reason: '정상 배송 링크가 아닌 스마트폰 해킹용 악성 파일 다운로드 주소입니다.'
+        }
+      ],
+      explanation:
+        '실제 택배 기사의 배송 완료 사진 알림 문자 형식을 정교하게 사칭한 신종 수법입니다. 링크 접속 시 악성 앱이 설치되어 금융정보가 유출될 수 있으므로, 구매 쇼핑몰 공식 앱에서만 조회하세요.',
+      easy_explanation:
+        '택배 보관 사진을 보라는 문자 링크도 악성 앱일 수 있어요. 누르지 말고 물건을 주문한 앱에서 확인하세요.'
+    }
   },
   지원금: {
-    scam_type: '지원금',
-    difficulty: '보통',
-    message:
-      '[○○지원센터] 2026년도 민생안정 지원금 신청 대상자입니다. 마감 임박으로 https://example.com/grant 에서 본인 인증 후 수령하세요.',
-    choices: ['신고하기', '삭제하기', '링크 누르기', '적힌 번호로 전화하기', '가족에게 확인하기'],
-    best_choices: ['신고하기', '삭제하기'],
-    signals: [
-      {
-        text: '마감 임박',
-        category: '긴급성',
-        reason: '신청 기한이 곧 끝난다는 표현으로 판단을 서두르게 만듭니다.'
-      },
-      {
-        text: 'https://example.com/grant',
-        category: 'URL',
-        reason: '정부 지원금 안내는 공식 홈페이지나 정부 앱을 통해 직접 확인해야 합니다.'
-      }
-    ],
-    explanation:
-      '지원금 신청을 빙자해 개인정보와 금융정보를 탈취하는 대표 수법입니다. 문자 링크에 접속하지 말고 삭제 후 신고하세요.',
-    easy_explanation:
-      '지원금을 준다는 문자의 주소는 가짜일 수 있어요. 절대 누르지 말고 지우세요.'
+    쉬움: {
+      scam_type: '지원금',
+      difficulty: '쉬움',
+      message:
+        '[○○지원센터 긴급] 축하합니다!! 2026 정부 특별지원금 300만원 당첨! 선착순 100명 오늘 마감 서둘러 수령하세요: https://example.com/grant-event',
+      choices: ['신고하기', '삭제하기', '링크 누르기', '적힌 번호로 전화하기', '가족에게 확인하기'],
+      best_choices: ['신고하기', '삭제하기'],
+      signals: [
+        {
+          text: '300만원 당첨!',
+          category: '금전요구',
+          reason: '정부 지원금은 무작위 당첨 방식으로 지급되지 않습니다.'
+        },
+        {
+          text: '선착순 100명 오늘 마감',
+          category: '긴급성',
+          reason: '선착순 마감을 내세워 의심할 틈 없이 누르게 만듭니다.'
+        },
+        {
+          text: 'https://example.com/grant-event',
+          category: 'URL',
+          reason: '사행성 이벤트로 위장한 피싱 사이트 주소입니다.'
+        }
+      ],
+      explanation:
+        '정부 재난지원금이나 복지 지원금은 선착순 당첨이나 문자 링크 클릭 방식으로 지급되지 않습니다. 개인정보 탈취를 노리는 전형적 미끼입니다.',
+      easy_explanation:
+        '지원금에 당첨되었다는 문자는 가짜예요. 링크를 누르면 금융정보가 빠져나가니 지우세요.'
+    },
+    보통: {
+      scam_type: '지원금',
+      difficulty: '보통',
+      message:
+        '[○○지원센터] 2026년도 민생안정 지원금 신청 대상자입니다. 마감 임박으로 https://example.com/grant 에서 본인 인증 후 수령하세요.',
+      choices: ['신고하기', '삭제하기', '링크 누르기', '적힌 번호로 전화하기', '가족에게 확인하기'],
+      best_choices: ['신고하기', '삭제하기'],
+      signals: [
+        {
+          text: '마감 임박',
+          category: '긴급성',
+          reason: '신청 기한이 곧 끝난다는 표현으로 판단을 서두르게 만듭니다.'
+        },
+        {
+          text: 'https://example.com/grant',
+          category: 'URL',
+          reason: '정부 지원금 안내는 공식 홈페이지나 정부 앱을 통해 직접 확인해야 합니다.'
+        }
+      ],
+      explanation:
+        '지원금 신청을 빙자해 개인정보와 금융정보를 탈취하는 대표 수법입니다. 문자 링크에 접속하지 말고 삭제 후 신고하세요.',
+      easy_explanation:
+        '지원금을 준다는 문자의 주소는 가짜일 수 있어요. 절대 누르지 말고 지우세요.'
+    },
+    어려움: {
+      scam_type: '지원금',
+      difficulty: '어려움',
+      message:
+        '[○○재단] 2026 소상공인 정책자금 1차 적격 심사 결과 안내. 귀하는 특별 지원금 지급 대상자로 예비 선정되었습니다. 지원금 지급 조건 및 심사 결과 확인: https://example.com/policy/grant (문의: 000-0000-0000)',
+      choices: ['신고하기', '삭제하기', '링크 누르기', '적힌 번호로 전화하기', '가족에게 확인하기'],
+      best_choices: ['신고하기', '삭제하기'],
+      signals: [
+        {
+          text: '[○○재단]',
+          category: '기관사칭',
+          reason: '공식 정책금융 기관이나 공익재단의 공문서 양식을 자연스럽게 사칭합니다.'
+        },
+        {
+          text: '예비 선정되었습니다',
+          category: '개인정보요구',
+          reason: '선정 사실을 미끼로 본인확인용 공인인증서나 계좌비밀번호 입력을 유도합니다.'
+        },
+        {
+          text: 'https://example.com/policy/grant',
+          category: 'URL',
+          reason: '공식 정책자금 접수 시스템을 위장한 정교한 피싱 페이지입니다.'
+        }
+      ],
+      explanation:
+        '공공기관의 정책금융 지원 사업 공고를 정교하게 흉내 낸 수법입니다. 공식 기관은 문자 링크를 통해 지원금 대상자 심사 결과를 확인하도록 요구하지 않으므로 소상공인진흥공단 등 대표 사이트에서 직접 조회해야 합니다.',
+      easy_explanation:
+        '심사에 통과했다며 온 지원금 문자도 가짜일 수 있어요. 주소를 누르지 말고 해당 기관 대표번호로 직접 문의하세요.'
+    }
   },
   지인사칭: {
-    scam_type: '지인사칭',
-    difficulty: '어려움',
-    message:
-      '엄마 나 핸드폰 액정 깨져서 수리 맡겼어. 지금 급하게 결제할 게 있는데 000-0000-0000-00(○○은행) 계좌로 50만 원만 먼저 보내줄 수 있어?',
-    choices: ['신고하기', '삭제하기', '링크 누르기', '적힌 번호로 전화하기', '가족에게 확인하기'],
-    best_choices: ['가족에게 확인하기', '신고하기', '삭제하기'],
-    signals: [
-      {
-        text: '핸드폰 액정 깨져서',
-        category: '기관사칭',
-        reason: '통화가 어렵다는 핑계로 본인 음성 확인을 피하려는 전형적 수법입니다.'
-      },
-      {
-        text: '50만 원만 먼저 보내줄 수 있어?',
-        category: '금전요구',
-        reason: '타인 계좌나 급한 이체를 요구하며 금전 탈취를 시도합니다.'
-      }
-    ],
-    explanation:
-      '가족이나 지인이 휴대전화 고장을 이유로 금전 이체를 부탁하면 반드시 기존에 저장된 번호로 직접 통화하거나 다른 가족에게 먼저 확인해야 합니다.',
-    easy_explanation:
-      '가족이 돈을 보내달라고 해도 문자만 보고 보내면 안 돼요. 원래 알던 번호로 직접 전화해서 확인하세요.'
+    쉬움: {
+      scam_type: '지인사칭',
+      difficulty: '쉬움',
+      message:
+        '엄마 나 지금 폰 고장나서 PC방인데 편의점 가서 구글 기프트카드 50만원권 사서 핀번호 사진좀 찍어보내줘 급해!! https://example.com/pin (연락처: 000-0000-0000)',
+      choices: ['신고하기', '삭제하기', '링크 누르기', '적힌 번호로 전화하기', '가족에게 확인하기'],
+      best_choices: ['가족에게 확인하기', '신고하기', '삭제하기'],
+      signals: [
+        {
+          text: '구글 기프트카드 50만원권',
+          category: '금전요구',
+          reason: '자녀를 사칭하여 추적이 어려운 상품권 핀번호를 요구하는 전형적 수법입니다.'
+        },
+        {
+          text: '핀번호 사진좀 찍어보내줘 급해!!',
+          category: '긴급성',
+          reason: '급박한 상황을 연출해 본인 확인을 거치지 못하게 독촉합니다.'
+        },
+        {
+          text: 'https://example.com/pin',
+          category: 'URL',
+          reason: '상품권 핀번호를 즉시 탈취하려는 사기 페이지입니다.'
+        }
+      ],
+      explanation:
+        '자녀나 지인을 사칭하여 편의점 기프트카드나 상품권 핀번호를 요구하는 전형적 메신저 피싱 수법입니다. 문자에 답장하거나 링크를 누르지 말고, 기존에 알던 자녀 전화번호로 직접 음성 통화해 확인해야 합니다.',
+      easy_explanation:
+        '가족이라면서 상품권이나 핀번호를 사달라는 문자는 사기예요. 원래 알던 번호로 직접 전화해서 물어보세요.'
+    },
+    보통: {
+      scam_type: '지인사칭',
+      difficulty: '보통',
+      message:
+        '엄마 나 핸드폰 액정 깨져서 수리 맡겼어. 지금 급하게 결제할 게 있는데 000-0000-0000(○○은행) 계좌로 50만 원만 먼저 보내줄 수 있어?',
+      choices: ['신고하기', '삭제하기', '링크 누르기', '적힌 번호로 전화하기', '가족에게 확인하기'],
+      best_choices: ['가족에게 확인하기', '신고하기', '삭제하기'],
+      signals: [
+        {
+          text: '핸드폰 액정 깨져서',
+          category: '기관사칭',
+          reason: '통화가 어렵다는 핑계로 본인 음성 확인을 피하려는 전형적 수법입니다.'
+        },
+        {
+          text: '50만 원만 먼저 보내줄 수 있어?',
+          category: '금전요구',
+          reason: '타인 계좌나 급한 이체를 요구하며 금전 탈취를 시도합니다.'
+        }
+      ],
+      explanation:
+        '가족이나 지인이 휴대전화 고장을 이유로 금전 이체를 부탁하면 반드시 기존에 저장된 번호로 직접 통화하거나 다른 가족에게 먼저 확인해야 합니다.',
+      easy_explanation:
+        '가족이 돈을 보내달라고 해도 문자만 보고 보내면 안 돼요. 원래 알던 번호로 직접 전화해서 확인하세요.'
+    },
+    어려움: {
+      scam_type: '지인사칭',
+      difficulty: '어려움',
+      message:
+        '[모바일청첩장] 저희 두 사람의 새로운 시작을 축복해 주세요. 일시: 다음 달 18일 토요일 13시. 모바일 청첩장 보기 및 식장 안내: https://example.com/wedding/invite',
+      choices: ['신고하기', '삭제하기', '링크 누르기', '적힌 번호로 전화하기', '가족에게 확인하기'],
+      best_choices: ['가족에게 확인하기', '신고하기', '삭제하기'],
+      signals: [
+        {
+          text: '[모바일청첩장]',
+          category: '기관사칭',
+          reason: '일상적인 경조사 알림으로 위장해 경계심을 완전히 무너뜨립니다.'
+        },
+        {
+          text: '모바일 청첩장 보기 및 식장 안내',
+          category: '개인정보요구',
+          reason: '청첩장 열람을 미끼로 스마트폰에 악성 파일(APK) 설치를 유도합니다.'
+        },
+        {
+          text: 'https://example.com/wedding/invite',
+          category: 'URL',
+          reason: '스마트폰 내 주소록과 공인인증서를 빼가는 악성 앱 유포 도메인입니다.'
+        }
+      ],
+      explanation:
+        '실제 지인의 청첩장이나 부고장 문자와 구별하기 어려운 최신 고난도 스미싱입니다. 링크를 누르는 순간 스마트폰에 악성코드가 깔리고 지인들에게 동일 문자가 대량 발송되므로, 링크를 누르지 말고 당사자에게 전화로 사실 여부를 확인해야 합니다.',
+      easy_explanation:
+        '청첩장 속 인터넷 주소를 누르면 핸드폰에 해킹 프로그램이 깔릴 수 있어요. 절대 주소를 누르지 말고 지인에게 전화해 보세요.'
+    }
   },
   대출: {
-    scam_type: '대출',
-    difficulty: '보통',
-    message:
-      '[○○은행] 정부지원 저금리 대환대출 특별 대상자 선정. 기존 고금리 상환 후 한도 상향 가능. 상담: 000-0000-0000 / 신청: https://example.com/loan',
-    choices: ['신고하기', '삭제하기', '링크 누르기', '적힌 번호로 전화하기', '가족에게 확인하기'],
-    best_choices: ['신고하기', '삭제하기'],
-    signals: [
-      {
-        text: '저금리 대환대출 특별 대상자',
-        category: '금전요구',
-        reason: '선이자나 기존 대출 상환 명목으로 금전을 요구하는 미끼 문구입니다.'
-      },
-      {
-        text: 'https://example.com/loan',
-        category: 'URL',
-        reason: '원격제어 앱이나 가짜 금융 앱 설치 링크로 연결될 위험이 큽니다.'
-      }
-    ],
-    explanation:
-      '금융회사는 문자로 특별 저금리 대환대출을 권유하며 링크 접속이나 선입금을 요구하지 않습니다. 바로 삭제하고 신고하세요.',
-    easy_explanation:
-      '싼 이자로 대출해 준다는 문자는 사기일 가능성이 커요. 주소를 누르거나 전화하지 마세요.'
+    쉬움: {
+      scam_type: '대출',
+      difficulty: '쉬움',
+      message:
+        '[○○금융 긴급대출] 신용불량/연체자 누구나 무심사 당일 1억원 즉시대출 승인!! 최저금리 1.2% 오늘 마감 즉시대출신청: https://example.com/fast-loan (문의: 000-0000-0000)',
+      choices: ['신고하기', '삭제하기', '링크 누르기', '적힌 번호로 전화하기', '가족에게 확인하기'],
+      best_choices: ['신고하기', '삭제하기'],
+      signals: [
+        {
+          text: '무심사 당일 1억원 즉시대출 승인!!',
+          category: '금전요구',
+          reason: '심사 없이 파격적 조건으로 대출해 준다는 비현실적인 미끼입니다.'
+        },
+        {
+          text: '오늘 마감',
+          category: '긴급성',
+          reason: '당일 마감을 강조해 정상적인 금융 상품인지 비교할 여유를 주지 않습니다.'
+        },
+        {
+          text: 'https://example.com/fast-loan',
+          category: 'URL',
+          reason: '선입금 수수료 요구 및 금융사기를 위한 피싱 링크입니다.'
+        }
+      ],
+      explanation:
+        '정식 금융회사는 신용 조회나 심사도 없이 신용불량자에게 당일 수억 원을 저금리로 대출해 주지 않습니다. 전형적인 대출 사기 미끼입니다.',
+      easy_explanation:
+        '신용조사도 없이 큰돈을 쉽게 빌려준다는 문자는 사기예요. 주소를 절대 누르지 마세요.'
+    },
+    보통: {
+      scam_type: '대출',
+      difficulty: '보통',
+      message:
+        '[○○은행] 정부지원 저금리 대환대출 특별 대상자 선정. 기존 고금리 상환 후 한도 상향 가능. 상담: 000-0000-0000 / 신청: https://example.com/loan',
+      choices: ['신고하기', '삭제하기', '링크 누르기', '적힌 번호로 전화하기', '가족에게 확인하기'],
+      best_choices: ['신고하기', '삭제하기'],
+      signals: [
+        {
+          text: '저금리 대환대출 특별 대상자',
+          category: '금전요구',
+          reason: '선이자나 기존 대출 상환 명목으로 금전을 요구하는 미끼 문구입니다.'
+        },
+        {
+          text: 'https://example.com/loan',
+          category: 'URL',
+          reason: '원격제어 앱이나 가짜 금융 앱 설치 링크로 연결될 위험이 큽니다.'
+        }
+      ],
+      explanation:
+        '금융회사는 문자로 특별 저금리 대환대출을 권유하며 링크 접속이나 선입금을 요구하지 않습니다. 바로 삭제하고 신고하세요.',
+      easy_explanation:
+        '싼 이자로 대출해 준다는 문자는 사기일 가능성이 커요. 주소를 누르거나 전화하지 마세요.'
+    },
+    어려움: {
+      scam_type: '대출',
+      difficulty: '어려움',
+      message:
+        '[○○은행] 고객님의 신용대출 만기 도래에 따른 금리인하요구권 심사 신청 안내. 비대면 간편 심사를 통해 최대 1.5% 우대금리가 적용됩니다. 심사 서류 확인: https://example.com/loan/renew (문의: 000-0000-0000)',
+      choices: ['신고하기', '삭제하기', '링크 누르기', '적힌 번호로 전화하기', '가족에게 확인하기'],
+      best_choices: ['신고하기', '삭제하기'],
+      signals: [
+        {
+          text: '[○○은행]',
+          category: '기관사칭',
+          reason: '기존 대출 보유 고객을 겨냥해 실제 1금융권 만기 연장 안내 형식을 사실적으로 사칭합니다.'
+        },
+        {
+          text: '심사 서류 확인',
+          category: '개인정보요구',
+          reason: '대출 서류 열람을 빙자해 보안카드 일련번호와 금융인증서 비밀번호를 가로챕니다.'
+        },
+        {
+          text: 'https://example.com/loan/renew',
+          category: 'URL',
+          reason: '정상 금융 포털이 아닌 가짜 모바일 뱅킹 피싱 사이트입니다.'
+        }
+      ],
+      explanation:
+        '기존 은행의 정상적인 만기 도래 및 금리인하 신청 안내 문자를 거의 그대로 흉내 낸 최신 수법입니다. 문자의 링크로 접속하지 말고, 은행 공식 모바일 뱅킹 앱을 직접 실행해 본인의 대출 관리 메뉴에서 확인해야 합니다.',
+      easy_explanation:
+        '대출 금리를 낮춰주겠다는 문자도 가짜일 수 있어요. 문자의 주소를 누르지 말고 은행 공식 앱에서 직접 확인하세요.'
+    }
   }
 };
 
+// 하위 호환성 보장: BACKUP_TRAINING_SCENARIOS[scamType] 자체를 직접 읽는 기존 코드와 완벽 호환
+Object.keys(BACKUP_TRAINING_SCENARIOS).forEach((type) => {
+  const byType = BACKUP_TRAINING_SCENARIOS[type];
+  if (byType && byType.보통) {
+    Object.assign(byType, byType.보통);
+  }
+});
+
+/**
+ * 사기 유형과 난이도에 맞는 시연용 백업 시나리오를 반환합니다.
+ * @param {string} scamType 사기 유형 ('기관사칭'|'택배'|'지원금'|'지인사칭'|'대출')
+ * @param {string} difficulty 난이도 ('쉬움'|'보통'|'어려움')
+ * @returns {object} 정규화된 훈련 시나리오 객체 복사본
+ */
+export function getBackupScenario(scamType, difficulty) {
+  const typeKey = BACKUP_TRAINING_SCENARIOS[scamType] ? scamType : '기관사칭';
+  const diffKey = ['쉬움', '보통', '어려움'].includes(difficulty) ? difficulty : '보통';
+  const typeGroup = BACKUP_TRAINING_SCENARIOS[typeKey];
+  const target = typeGroup?.[diffKey] || typeGroup?.보통 || BACKUP_TRAINING_SCENARIOS.기관사칭.보통;
+  return JSON.parse(JSON.stringify(target));
+}
+
 // 애플리케이션 상태 관리 객체
-const state = {
+export const state = {
   activeMode: 'analyze', // 'analyze' | 'train'
   easyMode: false,
   hasApiKey: true,
@@ -244,7 +566,10 @@ const state = {
     score: 0,
     total: 0,
     correct: 0
-  }
+  },
+  currentSignalModalSample: null,
+  currentSignalModalId: '01',
+  currentSignalModalName: '긴급성 압박'
 };
 
 // DOM 요소 참조 모음 (브라우저 환경에서 initDomRefs 호출 시 초기화됨)
@@ -260,6 +585,7 @@ function initDomRefs() {
     statScore: document.getElementById('stat-score'),
     statAccuracy: document.getElementById('stat-accuracy'),
     statCount: document.getElementById('stat-count'),
+    resetStatsBtn: document.getElementById('btn-reset-stats'),
 
     apiStatusBanner: document.getElementById('api-status-banner'),
     apiStatusText: document.getElementById('api-status-text'),
@@ -325,7 +651,23 @@ function initDomRefs() {
     trainExplanation: document.getElementById('train-explanation'),
     trainSignalsList: document.getElementById('train-signals-list'),
     sendToAnalyzeBtn: document.getElementById('btn-send-to-analyze'),
-    nextScenarioBtn: document.getElementById('btn-next-scenario')
+    nextScenarioBtn: document.getElementById('btn-next-scenario'),
+
+    signalModal: document.getElementById('signal-sample-modal'),
+    signalModalBadge: document.getElementById('signal-modal-badge'),
+    signalModalTitle: document.getElementById('signal-modal-title'),
+    signalModalLoading: document.getElementById('signal-modal-loading'),
+    signalModalError: document.getElementById('signal-modal-error'),
+    signalModalErrorMsg: document.getElementById('signal-modal-error-msg'),
+    signalModalContent: document.getElementById('signal-modal-content'),
+    signalSampleImg: document.getElementById('signal-sample-img'),
+    signalModalHighlight: document.getElementById('signal-modal-highlight'),
+    signalModalExplanation: document.getElementById('signal-modal-explanation'),
+    signalModalCountermeasure: document.getElementById('signal-modal-countermeasure'),
+    closeSignalModalBtn: document.getElementById('btn-close-signal-modal'),
+    closeSignalModalBottomBtn: document.getElementById('btn-close-signal-modal-bottom'),
+    downloadSignalImgBtn: document.getElementById('btn-download-signal-img'),
+    regenSignalSampleBtn: document.getElementById('btn-regen-signal-sample')
   };
 }
 
@@ -369,14 +711,46 @@ function loadSessionStats() {
  */
 function renderSessionStats() {
   const { score, total, correct } = state.sessionStats;
-  el.statScore.textContent = String(score);
-  el.statCount.textContent = String(total);
-  el.statAccuracy.textContent = total > 0 ? `${Math.round((correct / total) * 100)}%` : '—';
+  if (el?.statScore) {
+    el.statScore.textContent = String(score);
+  }
+  if (el?.statCount) {
+    el.statCount.textContent = String(total);
+  }
+  if (el?.statAccuracy) {
+    el.statAccuracy.textContent = total > 0 ? `${Math.round((correct / total) * 100)}%` : '—';
+  }
 
   try {
     sessionStorage.setItem('safetext_session_stats', JSON.stringify(state.sessionStats));
   } catch {
     // 무시
+  }
+}
+
+/**
+ * 누적 점수, 정답률, 완료 수를 0으로 초기화하고 UI 및 스토리지를 갱신합니다.
+ */
+export function resetSessionStats() {
+  state.sessionStats = {
+    score: 0,
+    total: 0,
+    correct: 0
+  };
+  try {
+    sessionStorage.removeItem('safetext_session_stats');
+  } catch {
+    // 무시
+  }
+  renderSessionStats();
+
+  if (el?.resetStatsBtn) {
+    el.resetStatsBtn.classList.remove('is-spinning');
+    void el.resetStatsBtn.offsetWidth;
+    el.resetStatsBtn.classList.add('is-spinning');
+    setTimeout(() => {
+      el.resetStatsBtn?.classList.remove('is-spinning');
+    }, 450);
   }
 }
 
@@ -847,8 +1221,8 @@ async function generateTrainingScenario(overrideType) {
   const difficulty = state.selectedDifficulty || '보통';
 
   if (state.demoModeForced) {
-    const fallback = BACKUP_TRAINING_SCENARIOS[scamType] || BACKUP_TRAINING_SCENARIOS.기관사칭;
-    renderTrainingScenario({ ...fallback, difficulty }, 'demo');
+    const scenario = getBackupScenario(scamType, difficulty);
+    renderTrainingScenario(scenario, 'demo');
     return;
   }
 
@@ -958,6 +1332,320 @@ function loadSampleText(sampleKey) {
   el.smsInput.focus();
 }
 
+// 6대 위험 신호 클라이언트 백업 시나리오 세트 (오프라인/대체용)
+export const CLIENT_SIGNAL_SAMPLES = {
+  '01': {
+    signalId: '01',
+    signalName: '긴급성 압박',
+    sender: '02-000-0000 (가상 번호)',
+    receivedAt: '오늘 오후 2:15',
+    message:
+      '[○○기관] 본인 명의 계좌 사기 연루 신고 접수. 금일 18시까지 미확인 시 전 계좌 즉시 지급정지 및 자산 압류 처분 진행. 긴급 소명 확인: https://example.com/urgent-check',
+    highlightPhrase: '금일 18시까지 미확인 시 전 계좌 즉시 지급정지',
+    threatType: '마감 기한 협박 및 자산 압류 불안감 조성',
+    explanation:
+      '당일 마감, 계좌 지급정지, 즉시 구속 등 극단적 불이익을 내세워 피해자가 진위를 파악할 여유를 주지 않고 급하게 링크를 클릭하게 만드는 대표 수법입니다.',
+    countermeasure:
+      '수사기관과 공공기관은 문자로 계좌를 즉시 동결하거나 구속하겠다고 협박하지 않습니다. 문자를 무시하고 118(KISA) 또는 112로 신고하세요.'
+  },
+  '02': {
+    signalId: '02',
+    signalName: '기관·기업 사칭',
+    sender: '02-000-0000 (가상 번호)',
+    receivedAt: '오늘 오전 11:42',
+    message:
+      '[○○지검 형사3부] 귀하 사건번호(2026형제-0000) 관련 출석요구서 송달 불능. 피의 사건 공소장 및 증거 목록 열람: https://example.com/prosecutor',
+    highlightPhrase: '[○○지검 형사3부] 귀하 사건번호(2026형제-0000)',
+    threatType: '공권력 및 사법기관 공문서 사칭',
+    explanation:
+      '검찰청, 경찰청, 법원, 금융감독원 등의 공신력 있는 기관 명칭과 가짜 사건번호를 도용해 심리적 위압감을 조성하는 전형적인 수법입니다.',
+    countermeasure:
+      '검찰과 경찰은 사건 확인서나 출석요구서를 인터넷 링크로 보내지 않습니다. 링크를 누르지 말고 검찰 콜센터(1301)로 진위를 확인하세요.'
+  },
+  '03': {
+    signalId: '03',
+    signalName: '출처 불명 URL',
+    sender: '000-0000-0000 (가상 번호)',
+    receivedAt: '오늘 오후 1:08',
+    message:
+      '[○○택배] 고객님 배송지 불명확으로 화물 반송 처리 중입니다. 도로명 주소 정정 요청: https://example.com/kr-post-verify',
+    highlightPhrase: 'https://example.com/kr-post-verify',
+    threatType: '가짜 피싱 사이트로 연결하는 변종 URL',
+    explanation:
+      '공식 택배사나 쇼핑몰 도메인이 아닌 교묘하게 위장된 사설 인터넷 주소를 첨부하여, 클릭 시 개인정보 입력창이나 악성 로그인 화면으로 유도합니다.',
+    countermeasure:
+      '문자 속 URL은 절대 누르지 마세요. 주문한 내역이 있다면 구매한 공식 쇼핑몰 앱이나 택배사 공식 앱에서 배송 조회를 직접 진행해야 안전합니다.'
+  },
+  '04': {
+    signalId: '04',
+    signalName: '앱 설치 유도',
+    sender: '000-0000-0000 (가상 번호)',
+    receivedAt: '오늘 오전 10:25',
+    message:
+      '[○○은행 보안센터] 이상 금융거래(부정 로그인) 감지. 자산 보호를 위해 필수 보안 백신(SecGuard.apk) 설치 후 실행 요망: https://example.com/app/SecGuard.apk',
+    highlightPhrase: '필수 보안 백신(SecGuard.apk) 설치 후 실행',
+    threatType: '원격제어 악성 앱(APK) 설치 유포',
+    explanation:
+      '은행 보안 프로그램이나 정부 인증 앱으로 위장한 악성 APK 파일을 스마트폰에 설치하게 한 뒤, 통화·문자·카메라 권한을 가로채 금융 자산을 탈취합니다.',
+    countermeasure:
+      '금융기관과 공공기관은 절대로 문자 링크를 통해 보안 앱(APK) 설치를 요구하지 않습니다. 구글 플레이스토어 등 공식 스토어가 아니면 설치하지 마세요.'
+  },
+  '05': {
+    signalId: '05',
+    signalName: '개인정보 요구',
+    sender: '000-0000-0000 (가상 번호)',
+    receivedAt: '오늘 오후 3:30',
+    message:
+      '[○○지원센터] 2026 민생안정 지원금 2차 신청 안내. 본인인증을 위해 신분증 사본 등록 및 계좌비밀번호 입력이 필요합니다. https://example.com/apply-cert',
+    highlightPhrase: '신분증 사본 등록 및 계좌비밀번호 입력',
+    threatType: '신분증·계좌비밀번호 등 민감정보 탈취',
+    explanation:
+      '정부 지원금이나 정책대출 신청을 빙자하여 신분증 사진, 계좌 비밀번호, 공인인증서 비밀번호 등 핵심 금융정보를 직접 입력받아 가로채는 수법입니다.',
+    countermeasure:
+      '정상적인 정부 지원금 신청이나 금융 업무에서는 어떠한 경우에도 문자로 계좌 비밀번호나 보안카드 번호를 요구하지 않습니다. 100% 사기입니다.'
+  },
+  '06': {
+    signalId: '06',
+    signalName: '금전·송금 요구',
+    sender: '000-0000-0000 (가상 번호)',
+    receivedAt: '오늘 오후 4:12',
+    message:
+      '엄마 나 지금 휴대폰 액정 깨져서 수리 맡겼어. 지금 급하게 결제할 게 있는데 편의점 가서 문화상품권 50만원권 핀번호 사진 찍어 보내줘 https://example.com/pin',
+    highlightPhrase: '문화상품권 50만원권 핀번호 사진 찍어 보내줘',
+    threatType: '가족·지인 사칭 상품권 핀번호 및 금전 요구',
+    explanation:
+      '자녀나 지인의 휴대폰 파손을 핑계로 전화 확인을 피하며, 추적이 어려운 문화상품권 핀번호나 타인 명의 가상계좌로의 긴급 송금을 유도하는 메신저 피싱입니다.',
+    countermeasure:
+      '가족이라 하더라도 문자로 상품권 핀번호나 급한 송금을 요구하면 문자 내 링크나 번호로 연락하지 말고, 반드시 원래 저장된 전화번호로 직접 음성 통화해 확인하세요.'
+  }
+};
+
+/**
+ * 긴 텍스트를 SVG 내에서 적절한 너비로 감싸기 위한 텍스트 줄바꿈 헬퍼
+ */
+function wrapSvgLines(text, maxChars = 21) {
+  if (!text) return [];
+  const lines = [];
+  let remaining = text.trim();
+  while (remaining.length > 0) {
+    if (remaining.length <= maxChars) {
+      lines.push(remaining);
+      break;
+    }
+    let sliceEnd = maxChars;
+    const spaceIndex = remaining.lastIndexOf(' ', maxChars);
+    if (spaceIndex > maxChars * 0.6) {
+      sliceEnd = spaceIndex;
+    }
+    lines.push(remaining.slice(0, sliceEnd).trim());
+    remaining = remaining.slice(sliceEnd).trim();
+  }
+  return lines;
+}
+
+/**
+ * XML 특수문자 이스케이프
+ */
+function escapeXmlText(str) {
+  if (typeof str !== 'string') return '';
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+/**
+ * 스마트폰 문자 수신 캡처 형태의 정교한 SVG 이미지를 생성합니다.
+ * @param {object} sample 위험 신호 샘플 객체
+ * @returns {string} SVG XML 문자열
+ */
+export function buildSignalSampleSvg(sample) {
+  const signalId = escapeXmlText(sample.signalId || '01');
+  const signalName = escapeXmlText(sample.signalName || '위험 신호');
+  const sender = escapeXmlText(sample.sender || '000-0000-0000 (가상 번호)');
+  const receivedAt = escapeXmlText(sample.receivedAt || '오늘 오후 2:15');
+  const message = sample.message || '';
+  const highlightPhrase = sample.highlightPhrase || '';
+  const threatType = escapeXmlText(sample.threatType || '스미싱 의심 표현');
+
+  const messageLines = wrapSvgLines(message, 21);
+  const bubbleHeight = Math.max(130, 48 + messageLines.length * 20 + 20);
+
+  let svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 560" width="380" height="560">
+  <defs>
+    <filter id="phoneShadowClient" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.18" />
+    </filter>
+    <linearGradient id="bubbleGradClient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#f8fafc" />
+    </linearGradient>
+  </defs>
+
+  <rect x="8" y="8" width="364" height="544" rx="36" fill="#0f172a" stroke="#334155" stroke-width="2.5" filter="url(#phoneShadowClient)" />
+  <rect x="18" y="18" width="344" height="524" rx="28" fill="#f1f5f9" />
+  <rect x="135" y="24" width="110" height="18" rx="9" fill="#020617" />
+  <circle cx="230" cy="33" r="3.5" fill="#1e293b" />
+
+  <text x="42" y="37" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" fill="#0f172a">14:15</text>
+  <path d="M 314 30 L 324 30 L 324 37 L 314 37 Z" fill="#0f172a" rx="1.5" />
+  <rect x="325" y="32" width="2" height="3" rx="1" fill="#0f172a" />
+  <path d="M 302 36 A 6 6 0 0 1 308 30 M 304 36 A 3 3 0 0 1 307 33" stroke="#0f172a" stroke-width="1.5" fill="none" stroke-linecap="round" />
+
+  <rect x="18" y="48" width="344" height="52" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" />
+  <path d="M 36 74 L 43 67 M 36 74 L 43 81" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="68" cy="74" r="15" fill="#e0e7ff" />
+  <path d="M 64 74 A 4 4 0 0 1 72 74 A 4 4 0 0 1 64 74 Z M 62 82 A 6 6 0 0 1 74 82" stroke="#4338ca" stroke-width="1.6" fill="none" />
+  
+  <text x="92" y="69" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="13" font-weight="700" fill="#0f172a">${sender}</text>
+  <text x="92" y="84" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10.5" fill="#64748b">문자메시지 · 가상 번호</text>
+
+  <g transform="translate(30, 112)">
+    <rect x="0" y="0" width="320" height="28" rx="6" fill="#fef2f2" stroke="#fecaca" stroke-width="1" />
+    <circle cx="16" cy="14" r="6" fill="#ef4444" />
+    <text x="16" y="17.5" font-family="-apple-system, sans-serif" font-size="9" font-weight="900" fill="#ffffff" text-anchor="middle">!</text>
+    <text x="28" y="18" font-family="-apple-system, sans-serif" font-size="11" font-weight="700" fill="#b91c1c">신호 ${signalId} 탐지: ${signalName}</text>
+  </g>
+
+  <text x="190" y="156" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10.5" fill="#94a3b8">${receivedAt}</text>
+
+  <g transform="translate(30, 166)">
+    <rect x="0" y="0" width="320" height="${bubbleHeight}" rx="14" fill="url(#bubbleGradClient)" stroke="#cbd5e1" stroke-width="1.2" />
+    <text x="16" y="24" font-family="-apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif" font-size="12" fill="#1e293b">`;
+
+  messageLines.forEach((line, idx) => {
+    const isHighlightLine = highlightPhrase && line.includes(highlightPhrase.slice(0, 8));
+    if (isHighlightLine) {
+      svg += `\n      <tspan x="16" dy="${idx === 0 ? 0 : 20}" font-weight="700" fill="#dc2626">${escapeXmlText(line)}</tspan>`;
+    } else {
+      svg += `\n      <tspan x="16" dy="${idx === 0 ? 0 : 20}">${escapeXmlText(line)}</tspan>`;
+    }
+  });
+
+  svg += `
+    </text>
+  </g>
+
+  <g transform="translate(30, ${176 + bubbleHeight})">
+    <rect x="0" y="0" width="320" height="66" rx="8" fill="#fff1f2" stroke="#fda4af" stroke-width="1.2" />
+    <text x="12" y="20" font-family="-apple-system, sans-serif" font-size="10.5" font-weight="800" fill="#be123c">🔍 위험 신호 핵심 분석</text>
+    <text x="12" y="37" font-family="-apple-system, sans-serif" font-size="10.5" font-weight="600" fill="#881337">수법: ${threatType}</text>
+    <text x="12" y="53" font-family="-apple-system, sans-serif" font-size="9.5" fill="#9f1239">핵심 구문: "${escapeXmlText(highlightPhrase.slice(0, 26))}${highlightPhrase.length > 26 ? '...' : ''}"</text>
+  </g>
+
+  <g transform="translate(30, 484)">
+    <rect x="0" y="0" width="320" height="32" rx="6" fill="#e2e8f0" />
+    <text x="160" y="20" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" font-weight="600" fill="#475569">
+      🛡️ SafeText AI 안전 교육용 가상 이미지 (Gemma 4)
+    </text>
+  </g>
+
+  <rect x="140" y="524" width="100" height="4" rx="2" fill="#94a3b8" />
+</svg>`;
+
+  return svg;
+}
+
+/**
+ * 6대 위험 신호 모달 팝업을 열고, google/gemma-4-26b-a4b-it:free 모델 기반 가상 예시 이미지를 불러와 표시합니다.
+ * @param {string} signalId 위험 신호 번호 ('01' ~ '06')
+ * @param {string} signalName 위험 신호 이름 ('긴급성 압박' 등)
+ */
+export async function openSignalSampleModal(signalId, signalName) {
+  if (!el?.signalModal) return;
+
+  state.currentSignalModalId = signalId || '01';
+  state.currentSignalModalName = signalName || '긴급성 압박';
+
+  // 모달 헤더 초기화
+  el.signalModalBadge.textContent = `위험 신호 ${state.currentSignalModalId}`;
+  el.signalModalTitle.textContent = `${state.currentSignalModalId}. ${state.currentSignalModalName} 가상 예시 이미지`;
+
+  // 상태 전환: 로딩 뷰 표시
+  el.signalModalLoading.classList.remove('hidden');
+  el.signalModalContent.classList.add('hidden');
+  el.signalModalError.classList.add('hidden');
+  el.signalModal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+
+  const fallback =
+    CLIENT_SIGNAL_SAMPLES[state.currentSignalModalId] ||
+    CLIENT_SIGNAL_SAMPLES['01'];
+
+  try {
+    const res = await fetch('/api/signal-sample', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        signalId: state.currentSignalModalId,
+        signalName: state.currentSignalModalName
+      })
+    });
+
+    const data = await res.json();
+    if (!res.ok || !data.ok || !data.sample) {
+      throw new Error(data?.message || '예시 이미지 생성 실패');
+    }
+
+    renderSignalSampleModal(data.sample);
+  } catch (error) {
+    // 네트워크 실패 또는 서버리스 미지원 환경 시 로컬 폴백 SVG 즉시 렌더링
+    const svg = buildSignalSampleSvg(fallback);
+    const imageUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+    renderSignalSampleModal({
+      ...fallback,
+      svg,
+      imageUrl
+    });
+  }
+}
+
+/**
+ * 모달 콘텐츠에 위험 신호 샘플 데이터를 렌더링합니다.
+ * @param {object} sample 
+ */
+function renderSignalSampleModal(sample) {
+  state.currentSignalModalSample = sample;
+
+  el.signalSampleImg.src = sample.imageUrl;
+  el.signalModalHighlight.textContent = `"${sample.highlightPhrase || ''}"`;
+  el.signalModalExplanation.textContent = sample.explanation || '';
+  el.signalModalCountermeasure.textContent = sample.countermeasure || '';
+
+  el.signalModalLoading.classList.add('hidden');
+  el.signalModalContent.classList.remove('hidden');
+}
+
+/**
+ * 위험 신호 모달 팝업을 닫습니다.
+ */
+export function closeSignalSampleModal() {
+  if (!el?.signalModal) return;
+  el.signalModal.classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+/**
+ * 현재 모달에 렌더링된 SVG 가상 예시 이미지를 파일(.svg)로 다운로드합니다.
+ */
+export function downloadSignalSampleSvg() {
+  const sample = state.currentSignalModalSample;
+  if (!sample?.svg) return;
+
+  const blob = new Blob([sample.svg], { type: 'image/svg+xml;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `스미싱_위험신호_${sample.signalId || '01'}_${sample.signalName || '예시'}.svg`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 /**
  * 모든 DOM 이벤트 리스너를 초기화합니다.
  */
@@ -977,6 +1665,9 @@ function bindEvents() {
 
   // 쉬운 말 안내 토글
   el.easyModeBtn.addEventListener('click', toggleEasyMode);
+
+  // 세션 누적 훈련 기록 초기화 버튼
+  el.resetStatsBtn?.addEventListener('click', resetSessionStats);
 
   // 시연용 고정 예시 모드 전환 배너 버튼
   el.toggleDemoModeBtn.addEventListener('click', () => {
@@ -1044,24 +1735,70 @@ function bindEvents() {
     generateTrainingScenario(targetType);
   });
 
+  // 사기 유형 변경 시 이미 시연 가상 문자를 보고 있다면 해당 유형과 선택된 난이도로 즉시 갱신
+  el.trainTypeSelect.addEventListener('change', () => {
+    if (
+      state.activeMode === 'train' &&
+      state.currentScenarioSource === 'demo' &&
+      state.currentScenario
+    ) {
+      const scamType = el.trainTypeSelect.value || '기관사칭';
+      const scenario = getBackupScenario(scamType, state.selectedDifficulty);
+      renderTrainingScenario(scenario, 'demo');
+    }
+  });
+
   // 난이도 선택 버튼
   document.querySelectorAll('.diff-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
-      state.selectedDifficulty = btn.dataset.diff || '보통';
+      const prevDiff = state.selectedDifficulty;
+      const newDiff = btn.dataset.diff || '보통';
+      state.selectedDifficulty = newDiff;
+
       document.querySelectorAll('.diff-btn').forEach((other) => {
         other.classList.toggle('is-active', other === btn);
       });
+
+      // 시연용 가상 문자(demo)를 보고 있는 상태에서 난이도를 조절했을 때
+      // 해당 난이도에 맞는 새로운 시연 문자로 즉시 교체 렌더링
+      if (
+        state.activeMode === 'train' &&
+        state.currentScenarioSource === 'demo' &&
+        state.currentScenario &&
+        prevDiff !== newDiff
+      ) {
+        const scamType = el.trainTypeSelect.value || state.currentScenario.scam_type || '기관사칭';
+        const scenario = getBackupScenario(scamType, newDiff);
+        renderTrainingScenario(scenario, 'demo');
+      }
     });
   });
 
   // 새 가상 문자 생성 및 재시도·백업 버튼
   el.generateScenarioBtn.addEventListener('click', () => generateTrainingScenario());
   el.retryTrainBtn.addEventListener('click', () => generateTrainingScenario());
-  el.nextScenarioBtn.addEventListener('click', () => generateTrainingScenario());
+  el.nextScenarioBtn.addEventListener('click', () => {
+    // 시연 가상 문자 체험 중이고 API 키가 없거나 고정 시연 모드인 경우
+    // 바로 다음 난이도로 순환하며 시연 문자를 연속 체험할 수 있도록 지원
+    if (state.currentScenarioSource === 'demo' && (!state.hasApiKey || state.demoModeForced)) {
+      const scamType = el.trainTypeSelect.value || '기관사칭';
+      const diffOrder = ['쉬움', '보통', '어려움'];
+      const currentIdx = diffOrder.indexOf(state.selectedDifficulty);
+      const nextDiff = diffOrder[(currentIdx + 1) % diffOrder.length];
+      state.selectedDifficulty = nextDiff;
+      document.querySelectorAll('.diff-btn').forEach((b) => {
+        b.classList.toggle('is-active', b.dataset.diff === nextDiff);
+      });
+      const scenario = getBackupScenario(scamType, nextDiff);
+      renderTrainingScenario(scenario, 'demo');
+      return;
+    }
+    generateTrainingScenario();
+  });
   el.useDemoTrainBtn.addEventListener('click', () => {
     const scamType = el.trainTypeSelect.value || '기관사칭';
-    const fallback = BACKUP_TRAINING_SCENARIOS[scamType] || BACKUP_TRAINING_SCENARIOS.기관사칭;
-    renderTrainingScenario({ ...fallback, difficulty: state.selectedDifficulty }, 'demo');
+    const scenario = getBackupScenario(scamType, state.selectedDifficulty);
+    renderTrainingScenario(scenario, 'demo');
   });
 
   // 융합 2: 훈련 문자 -> 판별 모드로 보내 하이라이트 복습하기
@@ -1074,6 +1811,49 @@ function bindEvents() {
     updateCharCount();
     document.getElementById('workspace')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     runAnalyze();
+  });
+
+  // 6대 위험 신호 카드 클릭 시 모달 열기 (google/gemma-4-26b-a4b-it:free 활용)
+  document.querySelectorAll('.guide-clickable').forEach((card) => {
+    const handleOpen = () => {
+      const signalId = card.dataset.signalId || '01';
+      const signalName = card.dataset.signalName || '긴급성 압박';
+      openSignalSampleModal(signalId, signalName);
+    };
+
+    card.addEventListener('click', handleOpen);
+    card.addEventListener('keydown', (evt) => {
+      if (evt.key === 'Enter' || evt.key === ' ') {
+        evt.preventDefault();
+        handleOpen();
+      }
+    });
+  });
+
+  // 모달 닫기 버튼들
+  el.closeSignalModalBtn?.addEventListener('click', closeSignalSampleModal);
+  el.closeSignalModalBottomBtn?.addEventListener('click', closeSignalSampleModal);
+
+  // 모달 백드롭 클릭 시 닫기
+  el.signalModal?.addEventListener('click', (evt) => {
+    if (evt.target === el.signalModal) {
+      closeSignalSampleModal();
+    }
+  });
+
+  // ESC 키 누를 때 모달 닫기
+  document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape' && el.signalModal && !el.signalModal.classList.contains('hidden')) {
+      closeSignalSampleModal();
+    }
+  });
+
+  // 모달 내 이미지 다운로드 버튼
+  el.downloadSignalImgBtn?.addEventListener('click', downloadSignalSampleSvg);
+
+  // 모달 내 다른 가상 예시 재생성 버튼
+  el.regenSignalSampleBtn?.addEventListener('click', () => {
+    openSignalSampleModal(state.currentSignalModalId, state.currentSignalModalName);
   });
 }
 

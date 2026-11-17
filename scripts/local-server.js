@@ -12,6 +12,7 @@ import { fileURLToPath } from 'node:url';
 import analyzeHandler from '../api/analyze.js';
 import trainHandler from '../api/train.js';
 import healthHandler from '../api/health.js';
+import signalSampleHandler from '../api/signal-sample.js';
 
 // 현재 파일 기준 프로젝트 루트 경로 계산
 const __filename = fileURLToPath(import.meta.url);
@@ -104,6 +105,9 @@ const server = http.createServer(async (req, res) => {
   }
   if (pathname === '/api/health') {
     return healthHandler(req, adaptVercelResponse(res));
+  }
+  if (pathname === '/api/signal-sample') {
+    return signalSampleHandler(req, adaptVercelResponse(res));
   }
 
   // 2. 정적 파일 서빙 (보안상 .env, api/, scripts/ 직접 접근 차단)

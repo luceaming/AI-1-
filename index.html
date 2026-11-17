@@ -83,6 +83,19 @@
               <span>정답률 <strong id="stat-accuracy" class="mono-num">—</strong></span>
               <span class="meta-sep" aria-hidden="true">·</span>
               <span>완료 <strong id="stat-count" class="mono-num">0</strong>회</span>
+              <button
+                type="button"
+                id="btn-reset-stats"
+                class="btn-reset-stats"
+                title="누적 점수, 정답률, 완료 수 초기화"
+                aria-label="누적 점수, 정답률, 완료 수 초기화"
+              >
+                <svg class="icon-reset" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                  <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                </svg>
+                초기화
+              </button>
             </div>
           </div>
         </div>
@@ -496,29 +509,88 @@
           </div>
 
           <div class="guide-grid">
-            <article class="guide-item">
-              <h3 class="guide-item-title">01. 긴급성 압박</h3>
+            <article class="guide-item guide-clickable" data-signal-id="01" data-signal-name="긴급성 압박" role="button" tabindex="0" aria-haspopup="dialog">
+              <div class="guide-item-top">
+                <h3 class="guide-item-title">01. 긴급성 압박</h3>
+                <span class="guide-tag">예시 보기</span>
+              </div>
               <p class="guide-item-desc">“오늘 자정까지”, “미확인 시 계좌 정지·압류”처럼 당황하게 만들어 확인 없이 누르게 합니다.</p>
+              <div class="guide-action-pill">
+                <span>가상의 예시 이미지 보기</span>
+                <svg class="icon-arrow" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+                </svg>
+              </div>
             </article>
-            <article class="guide-item">
-              <h3 class="guide-item-title">02. 기관·기업 사칭</h3>
+
+            <article class="guide-item guide-clickable" data-signal-id="02" data-signal-name="기관·기업 사칭" role="button" tabindex="0" aria-haspopup="dialog">
+              <div class="guide-item-top">
+                <h3 class="guide-item-title">02. 기관·기업 사칭</h3>
+                <span class="guide-tag">예시 보기</span>
+              </div>
               <p class="guide-item-desc">검찰·경찰·국세청·건강보험·은행·택배사를 내세워 신뢰를 얻고 거부하기 어렵게 만듭니다.</p>
+              <div class="guide-action-pill">
+                <span>가상의 예시 이미지 보기</span>
+                <svg class="icon-arrow" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+                </svg>
+              </div>
             </article>
-            <article class="guide-item">
-              <h3 class="guide-item-title">03. 출처 불명 URL</h3>
+
+            <article class="guide-item guide-clickable" data-signal-id="03" data-signal-name="출처 불명 URL" role="button" tabindex="0" aria-haspopup="dialog">
+              <div class="guide-item-top">
+                <h3 class="guide-item-title">03. 출처 불명 URL</h3>
+                <span class="guide-tag">예시 보기</span>
+              </div>
               <p class="guide-item-desc">단축 주소나 공식 도메인과 비슷한 가짜 주소를 넣어 피싱 사이트 접속을 유도합니다.</p>
+              <div class="guide-action-pill">
+                <span>가상의 예시 이미지 보기</span>
+                <svg class="icon-arrow" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+                </svg>
+              </div>
             </article>
-            <article class="guide-item">
-              <h3 class="guide-item-title">04. 앱 설치 유도</h3>
+
+            <article class="guide-item guide-clickable" data-signal-id="04" data-signal-name="앱 설치 유도" role="button" tabindex="0" aria-haspopup="dialog">
+              <div class="guide-item-top">
+                <h3 class="guide-item-title">04. 앱 설치 유도</h3>
+                <span class="guide-tag">예시 보기</span>
+              </div>
               <p class="guide-item-desc">사건 열람이나 보안 점검을 이유로 설치 파일(.apk)이나 원격제어 앱 설치를 요구합니다.</p>
+              <div class="guide-action-pill">
+                <span>가상의 예시 이미지 보기</span>
+                <svg class="icon-arrow" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+                </svg>
+              </div>
             </article>
-            <article class="guide-item">
-              <h3 class="guide-item-title">05. 개인정보 요구</h3>
+
+            <article class="guide-item guide-clickable" data-signal-id="05" data-signal-name="개인정보 요구" role="button" tabindex="0" aria-haspopup="dialog">
+              <div class="guide-item-top">
+                <h3 class="guide-item-title">05. 개인정보 요구</h3>
+                <span class="guide-tag">예시 보기</span>
+              </div>
               <p class="guide-item-desc">신분증 사진, 비밀번호, 일회용 인증번호, 계좌 비밀번호 입력을 요구하면 100% 의심해야 합니다.</p>
+              <div class="guide-action-pill">
+                <span>가상의 예시 이미지 보기</span>
+                <svg class="icon-arrow" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+                </svg>
+              </div>
             </article>
-            <article class="guide-item">
-              <h3 class="guide-item-title">06. 금전·송금 요구</h3>
+
+            <article class="guide-item guide-clickable" data-signal-id="06" data-signal-name="금전·송금 요구" role="button" tabindex="0" aria-haspopup="dialog">
+              <div class="guide-item-top">
+                <h3 class="guide-item-title">06. 금전·송금 요구</h3>
+                <span class="guide-tag">예시 보기</span>
+              </div>
               <p class="guide-item-desc">합의금, 수수료, 상품권 핀번호, 가족을 사칭한 긴급 송금 요청은 반드시 전화로 직접 확인하세요.</p>
+              <div class="guide-action-pill">
+                <span>가상의 예시 이미지 보기</span>
+                <svg class="icon-arrow" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+                </svg>
+              </div>
             </article>
           </div>
         </div>
@@ -554,6 +626,127 @@
         <span>참고용 판별이며 100% 정확하지 않음, 의심되면 118(KISA) 또는 112에 문의</span>
       </div>
     </footer>
+
+    <!-- 6대 위험 신호 가상 예시 이미지 모달 팝업 (google/gemma-4-26b-a4b-it:free 활용) -->
+    <div
+      id="signal-sample-modal"
+      class="modal-backdrop hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="signal-modal-title"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <span id="signal-modal-badge" class="modal-signal-tag">위험 신호 01</span>
+            <h3 id="signal-modal-title" class="modal-title">01. 긴급성 압박 예시</h3>
+          </div>
+          <div class="modal-header-actions">
+            <span class="model-pill">
+              <span class="model-pill-dot" aria-hidden="true"></span>
+              google/gemma-4-26b-a4b-it:free
+            </span>
+            <button
+              type="button"
+              id="btn-close-signal-modal"
+              class="modal-close-btn"
+              aria-label="닫기"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <div class="modal-body">
+          <!-- 로딩 상태 -->
+          <div id="signal-modal-loading" class="modal-loading-box">
+            <div class="spinner" aria-hidden="true"></div>
+            <p class="modal-loading-title">가상의 예시 이미지를 생성하고 있습니다</p>
+            <p class="modal-loading-desc">
+              <code>google/gemma-4-26b-a4b-it:free</code> 모델이 안전 규칙을 준수하는 스마트폰 수신 가상 문자 캡처 이미지를 준비 중입니다.
+            </p>
+          </div>
+
+          <!-- 에러/안내 상태 (필요 시) -->
+          <div id="signal-modal-error" class="modal-error-box hidden" role="alert">
+            <p id="signal-modal-error-msg" class="modal-error-msg"></p>
+          </div>
+
+          <!-- 콘텐츠 영역: 2단 레이아웃 (스마트폰 캡처 이미지 + 수법 해설) -->
+          <div id="signal-modal-content" class="signal-modal-split hidden">
+            <!-- 왼쪽: 스마트폰 가상 캡처 이미지 -->
+            <div class="signal-modal-img-col">
+              <div class="phone-img-frame">
+                <img
+                  id="signal-sample-img"
+                  class="signal-phone-img"
+                  src=""
+                  alt="스미싱 가상 문자 예시 이미지"
+                />
+              </div>
+              <div class="img-download-bar">
+                <button
+                  type="button"
+                  id="btn-download-signal-img"
+                  class="btn btn-secondary btn-sm"
+                >
+                  <svg class="icon-inline" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 00-1.09-1.03l-2.955 3.129V2.75z" />
+                    <path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" />
+                  </svg>
+                  가상 예시 이미지(.svg) 다운로드
+                </button>
+              </div>
+            </div>
+
+            <!-- 오른쪽: 상세 수법 및 대처 가이드 -->
+            <div class="signal-modal-info-col">
+              <div class="info-block">
+                <h4 class="info-block-title">💡 핵심 위험 신호 표현</h4>
+                <div class="quote-box" id="signal-modal-highlight">
+                  "금일 18시까지 미확인 시 전 계좌 즉시 지급정지"
+                </div>
+              </div>
+
+              <div class="info-block">
+                <h4 class="info-block-title">🚨 수법 분석</h4>
+                <p id="signal-modal-explanation" class="info-block-desc">
+                  당일 마감, 계좌 지급정지, 즉시 구속 등 극단적 불이익을 내세워 피해자가 진위를 파악할 여유를 주지 않고 급하게 링크를 클릭하게 만드는 대표 수법입니다.
+                </p>
+              </div>
+
+              <div class="info-block">
+                <h4 class="info-block-title">🛡️ 수신 시 안전 대응 요령</h4>
+                <p id="signal-modal-countermeasure" class="info-block-desc safe-desc">
+                  수사기관과 공공기관은 문자로 계좌를 즉시 동결하거나 구속하겠다고 협박하지 않습니다. 문자를 무시하고 118(KISA) 또는 112로 신고하세요.
+                </p>
+              </div>
+
+              <div class="modal-footer-actions">
+                <button
+                  type="button"
+                  id="btn-regen-signal-sample"
+                  class="btn btn-primary btn-sm"
+                >
+                  <svg class="icon-inline" viewBox="0 0 16 16" fill="currentColor">
+                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                  </svg>
+                  다른 가상 예시 생성 (Gemma 4)
+                </button>
+                <button
+                  type="button"
+                  id="btn-close-signal-modal-bottom"
+                  class="btn btn-secondary btn-sm"
+                >
+                  닫기
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- 순수 바닐라 자바스크립트 모듈 연결 -->
     <script type="module" src="/script.js"></script>
