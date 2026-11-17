@@ -1,0 +1,9 @@
+# Vercel 배포 시 업로드·정적 노출에서 제외할 로컬 전용 파일 목록
+.env*
+.aistudio/
+.playwright-cli/
+.git/
+node_modules/
+tests/
+scripts/local-server.js
+public/

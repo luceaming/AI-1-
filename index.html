@@ -1,126 +1,561 @@
-<!DOCTYPE html>
-<!-- 한국어 문서 선언 -->
+<!doctype html>
 <html lang="ko">
-<head>
-  <!-- 문자 인코딩 설정 (UTF-8) -->
-  <meta charset="UTF-8">
-  <!-- 모바일 및 다양한 기기 환경을 위한 반응형 뷰포트 설정 -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- 웹 애플리케이션 제목 -->
-  <title>실시간 대기오염 정보 조회</title>
-  <!-- Chart.js 데이터 시각화 라이브러리 CDN 로드 -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- 외부 스타일시트 연결 -->
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <!-- 전체 콘텐츠 감싸는 메인 컨테이너 -->
-  <div class="app-container">
+  <head>
+    <!-- 문서 문자 인코딩 및 반응형 뷰포트 설정 -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- 상단 헤더 영역 -->
-    <header class="header">
-      <!-- 메인 타이틀 -->
-      <h1 class="header-title">실시간 대기오염 정보</h1>
-      <!-- 부제목 설명 -->
-      <p class="header-desc">에어코리아 오픈API 기반 시·도별 미세먼지 실시간 현황</p>
+    <!-- metadata.json과 동기화된 페이지 제목 및 검색/공유 메타데이터 -->
+    <title>SafeText Trainer — 스미싱 판별·훈련 웹앱</title>
+    <meta
+      name="description"
+      content="의심 문자의 위험도와 위험 표현을 하이라이트로 분석하고, 같은 수법의 교육용 가상 문자로 대응을 연습하는 스미싱 판별·훈련 웹앱입니다."
+    />
+    <meta property="og:title" content="SafeText Trainer — 스미싱 판별·훈련 웹앱" />
+    <meta
+      property="og:description"
+      content="의심 문자의 위험도와 위험 표현을 하이라이트로 분석하고, 같은 수법의 교육용 가상 문자로 대응을 연습하는 스미싱 판별·훈련 웹앱입니다."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- 가독성 높은 한글·영문 산세리프 및 고정폭 숫자 글꼴 로드 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Noto+Sans+KR:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- 순수 CSS 스타일시트 연결 -->
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body id="top">
+    <!-- 상단 내비게이션: 브랜드 워드마크 · 4개 텍스트 링크 · 1개 주요 버튼의 3구역 구조 -->
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="#top" class="brand-wordmark">SafeText Trainer</a>
+
+        <nav class="main-nav" aria-label="주요 메뉴">
+          <a href="#workspace" class="nav-link" data-nav-mode="analyze">문자 판별</a>
+          <a href="#workspace" class="nav-link" data-nav-mode="train">대응 훈련</a>
+          <a href="#guide" class="nav-link">위험 신호 가이드</a>
+          <a href="#safety" class="nav-link">예방 수칙</a>
+        </nav>
+
+        <div class="header-action">
+          <button type="button" id="btn-header-demo" class="btn btn-primary btn-sm">
+            시연 예시 불러오기
+          </button>
+        </div>
+      </div>
     </header>
 
-    <!-- 사용자 입력 및 컨트롤 바 영역 -->
-    <section class="control-section">
-      <!-- 시도 선택 안내 라벨 -->
-      <label for="sidoSelect" class="control-label">지역 선택:</label>
-      <!-- 시도를 선택할 수 있는 드롭다운 메뉴 -->
-      <select id="sidoSelect" class="sido-dropdown">
-        <!-- 전국 옵션 -->
-        <option value="전국">전국</option>
-        <!-- 서울 옵션 (기본 선택) -->
-        <option value="서울" selected>서울</option>
-        <!-- 부산 옵션 -->
-        <option value="부산">부산</option>
-        <!-- 대구 옵션 -->
-        <option value="대구">대구</option>
-        <!-- 인천 옵션 -->
-        <option value="인천">인천</option>
-        <!-- 광주 옵션 -->
-        <option value="광주">광주</option>
-        <!-- 대전 옵션 -->
-        <option value="대전">대전</option>
-        <!-- 울산 옵션 -->
-        <option value="울산">울산</option>
-        <!-- 세종 옵션 -->
-        <option value="세종">세종</option>
-        <!-- 경기 옵션 -->
-        <option value="경기">경기</option>
-        <!-- 강원 옵션 -->
-        <option value="강원">강원</option>
-        <!-- 충북 옵션 -->
-        <option value="충북">충북</option>
-        <!-- 충남 옵션 -->
-        <option value="충남">충남</option>
-        <!-- 전북 옵션 -->
-        <option value="전북">전북</option>
-        <!-- 전남 옵션 -->
-        <option value="전남">전남</option>
-        <!-- 경북 옵션 -->
-        <option value="경북">경북</option>
-        <!-- 경남 옵션 -->
-        <option value="경남">경남</option>
-        <!-- 제주 옵션 -->
-        <option value="제주">제주</option>
-      </select>
-    </section>
+    <!-- 메인 워크스페이스 영역 -->
+    <main class="main-content">
+      <!-- 상단 요약 및 쉬운 말·훈련 기록 표시 영역 -->
+      <section class="intro-band" aria-labelledby="hero-title">
+        <div class="container intro-inner">
+          <div class="intro-copy">
+            <h1 id="hero-title" class="hero-title">
+              의심 문자는 바로 판별하고, 같은 수법은 훈련으로 익히세요
+            </h1>
+            <p class="hero-desc">
+              링크를 누르기 전에 문맥 속 위험 표현을 하이라이트로 확인하고, 같은 유형의 교육용 가상 문자로 안전한 대응 순서를 연습할 수 있습니다.
+            </p>
+          </div>
 
-    <!-- 선택 지역 평균 미세먼지 대형 수치 표시 섹션 -->
-    <section class="average-section" id="averageCard">
-      <!-- 평균 타이틀 레이블 -->
-      <h2 class="average-title" id="averageRegionText">서울 지역 평균 미세먼지</h2>
-      <!-- 큰 숫자로 강조되는 평균 수치 표시 영역 -->
-      <div class="average-value-box">
-        <!-- 평균 수치 숫자 -->
-        <span class="average-number" id="averageValue">-</span>
-        <!-- 측정 단위 -->
-        <span class="average-unit" id="averageUnit">㎍/㎥</span>
-      </div>
-      <!-- 평균 대기 등급 및 유효 측정소 정보 요약 텍스트 -->
-      <p class="average-status" id="averageStatus">데이터를 불러오는 중입니다...</p>
-    </section>
+          <div class="intro-controls">
+            <!-- 고령층과 초보자를 위한 쉬운 말 안내 전환 버튼 (PRD 1.4 반영) -->
+            <button
+              type="button"
+              id="btn-easy-mode"
+              class="btn btn-secondary btn-sm"
+              aria-pressed="false"
+            >
+              쉬운 말 안내: 끔
+            </button>
 
-    <!-- 측정소별 미세먼지 수치 상위 10개 가로 막대그래프 섹션 -->
-    <section class="chart-section" id="chartSection">
-      <!-- 차트 헤더 타이틀 및 설명 -->
-      <div class="chart-header">
-        <h3 class="chart-title">미세먼지 수치 TOP 10 측정소</h3>
-        <span class="chart-desc">수치가 높은 상위 10개소 (등급별 색상 적용)</span>
-      </div>
-      <!-- Chart.js 캔버스를 반응형으로 감싸는 컨테이너 -->
-      <div class="chart-wrapper">
-        <!-- 가로 막대그래프가 그려지는 캔버스 요소 -->
-        <canvas id="dustChart"></canvas>
-      </div>
-    </section>
+            <!-- 세션 누적 훈련 요약 (박스 없는 깔끔한 텍스트 메타데이터) -->
+            <div class="session-summary" aria-live="polite">
+              <span>누적 점수 <strong id="stat-score" class="mono-num">0</strong>점</span>
+              <span class="meta-sep" aria-hidden="true">·</span>
+              <span>정답률 <strong id="stat-accuracy" class="mono-num">—</strong></span>
+              <span class="meta-sep" aria-hidden="true">·</span>
+              <span>완료 <strong id="stat-count" class="mono-num">0</strong>회</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
-    <!-- 측정소 카드 목록 컨테이너 -->
-    <main class="station-list-container">
-      <!-- 측정소 목록 소제목 -->
-      <div class="list-header">
-        <!-- 안내 제목 -->
-        <h3 class="list-title">측정소별 상세 정보</h3>
-        <!-- 조회된 총 측정소 개수 표시 -->
-        <span class="list-count" id="stationCount">총 0개 측정소</span>
+      <!-- 상시 면책 안내 바 (PRD 6 비기능 요구사항) -->
+      <section class="disclaimer-strip" aria-label="면책 및 신고 안내">
+        <div class="container disclaimer-inner">
+          <svg class="icon-inline" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path
+              fill-rule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <p class="disclaimer-text">
+            참고용 판별이며 100% 정확하지 않음, 의심되면 <strong>118(KISA)</strong> 또는 <strong>112</strong>에 문의하세요.
+          </p>
+        </div>
+      </section>
+
+      <!-- OpenRouter API 키 미설정 등 서버 상태 안내 영역 (필요 시에만 표시) -->
+      <div id="api-status-banner" class="container status-banner hidden" role="status" aria-live="polite">
+        <div class="status-banner-body">
+          <p id="api-status-text" class="status-banner-text"></p>
+          <button type="button" id="btn-toggle-demo-mode" class="btn btn-secondary btn-sm">
+            시연용 고정 예시 모드로 전환
+          </button>
+        </div>
       </div>
 
-      <!-- 로딩 및 상태 메시지 표시 박스 -->
-      <div class="status-message" id="statusMessage" style="display: none;"></div>
+      <!-- 핵심 판별·훈련 전환 워크스페이스 -->
+      <section id="workspace" class="workspace-section" aria-label="판별 및 훈련 작업 공간">
+        <div class="container">
+          <!-- 모드 전환 탭 바 -->
+          <div class="workspace-toolbar">
+            <div class="segmented-tabs" role="tablist" aria-label="기능 모드 선택">
+              <button
+                type="button"
+                id="tab-analyze"
+                class="tab-btn is-active"
+                role="tab"
+                aria-selected="true"
+                aria-controls="panel-analyze"
+              >
+                1. 스미싱 판별 모드
+              </button>
+              <button
+                type="button"
+                id="tab-train"
+                class="tab-btn"
+                role="tab"
+                aria-selected="false"
+                aria-controls="panel-train"
+              >
+                2. 대응 시나리오 훈련
+              </button>
+            </div>
 
-      <!-- 측정소 카드들이 동적으로 추가되는 그리드 래퍼 -->
-      <div class="cards-grid" id="cardsGrid">
-        <!-- 자바스크립트에 의해 카드 요소가 동적으로 생성되어 들어옵니다 -->
-      </div>
+            <div class="toolbar-meta" id="active-mode-caption">
+              의심 문자·캡처 이미지를 입력하면 위험 점수와 원문 위험 표현을 분석합니다.
+            </div>
+          </div>
+
+          <!-- 패널 1: 스미싱 판별 모드 -->
+          <div
+            id="panel-analyze"
+            class="workbench-panel"
+            role="tabpanel"
+            aria-labelledby="tab-analyze"
+          >
+            <div class="split-grid">
+              <!-- 왼쪽 열: 문자·이미지 입력 및 개인정보 마스킹 제어 -->
+              <div class="surface-card input-pane">
+                <div class="pane-header">
+                  <h2 class="pane-title">의심 문자 입력</h2>
+                  <span id="char-count" class="muted-meta mono-num">0 / 3,000자</span>
+                </div>
+
+                <!-- 시연·테스트용 빠른 예시 불러오기 버튼 (PRD 9 시연 시나리오 지원) -->
+                <div class="sample-row" aria-label="빠른 시연 예시 선택">
+                  <span class="field-hint">시연 예시:</span>
+                  <button type="button" class="sample-btn" data-sample="agency">
+                    기관사칭 사기
+                  </button>
+                  <button type="button" class="sample-btn" data-sample="delivery">
+                    택배 사칭 사기
+                  </button>
+                  <button type="button" class="sample-btn" data-sample="normal">
+                    정상 입금 알림
+                  </button>
+                </div>
+
+                <label for="sms-input" class="sr-only">판별할 의심 문자 내용</label>
+                <textarea
+                  id="sms-input"
+                  class="sms-textarea"
+                  rows="7"
+                  maxlength="3000"
+                  placeholder="받은 문자 메시지를 그대로 붙여넣으세요. 예: [○○기관] 본인 확인 필요..."
+                ></textarea>
+
+                <!-- 개인정보 지우기 안내 및 자동 마스킹 도구 (PRD 6 반영) -->
+                <div class="privacy-row">
+                  <p class="privacy-note">
+                    개인정보(이름·전화번호·계좌번호)는 지우고 입력해 주세요. 입력 문자는 서버에 저장되지 않습니다.
+                  </p>
+                  <div class="privacy-actions">
+                    <button type="button" id="btn-mask-pii" class="btn btn-ghost btn-sm">
+                      개인정보 자동 마스킹
+                    </button>
+                    <button type="button" id="btn-clear-input" class="btn btn-ghost btn-sm">
+                      입력 지우기
+                    </button>
+                  </div>
+                </div>
+
+                <!-- 문자 캡처 이미지 업로드 (P2 기능: 멀티모달 모델 직접 분석) -->
+                <div class="image-upload-box">
+                  <div class="image-upload-header">
+                    <span class="field-label">문자 캡처 이미지 첨부 (선택)</span>
+                    <span class="field-hint">PNG, JPG, WEBP 지원 · 별도 OCR 없이 AI가 직접 판독</span>
+                  </div>
+                  <div class="image-upload-controls">
+                    <label for="image-input" class="btn btn-secondary btn-sm file-trigger">
+                      캡처 이미지 선택
+                    </label>
+                    <input
+                      type="file"
+                      id="image-input"
+                      class="sr-only"
+                      accept="image/png,image/jpeg,image/webp"
+                    />
+                    <span id="image-file-name" class="file-name">선택된 이미지 없음</span>
+                    <button
+                      type="button"
+                      id="btn-remove-image"
+                      class="btn btn-ghost btn-sm hidden"
+                    >
+                      이미지 제거
+                    </button>
+                  </div>
+                  <div id="image-preview-wrap" class="image-preview-wrap hidden">
+                    <img
+                      id="image-preview"
+                      class="image-preview"
+                      alt="업로드된 문자 캡처 미리보기"
+                      referrerpolicy="no-referrer"
+                    />
+                  </div>
+                </div>
+
+                <div class="submit-row">
+                  <button type="button" id="btn-analyze" class="btn btn-primary btn-lg">
+                    위험도 분석하기
+                  </button>
+                </div>
+              </div>
+
+              <!-- 오른쪽 열: AI 판별 결과, 원문 하이라이트 및 행동 안내 -->
+              <div class="surface-card result-pane" aria-live="polite">
+                <!-- 1. 초기 빈 상태 -->
+                <div id="analyze-empty" class="state-box">
+                  <h2 class="pane-title">판별 결과 대기 중</h2>
+                  <p class="state-desc">
+                    왼쪽 입력창에 의심 문자를 붙여넣거나 시연 예시를 선택해 분석을 시작하세요. AI가 다음 6가지 위험 신호를 문맥 중심으로 점검합니다.
+                  </p>
+                  <ul class="criteria-preview-list">
+                    <li><strong>긴급성 압박</strong> · 즉시 확인·미납 시 불이익 등 조급함 유발</li>
+                    <li><strong>기관·지인 사칭</strong> · 공공기관·택배·은행·가족 등을 사칭</li>
+                    <li><strong>의심 URL 포함</strong> · 정부·공공기관 안내 문자는 URL을 포함하지 않음</li>
+                    <li><strong>앱 설치 및 정보 요구</strong> · APK 설치, 신분증·인증번호·송금 유도</li>
+                  </ul>
+                </div>
+
+                <!-- 2. 로딩 상태 -->
+                <div id="analyze-loading" class="state-box hidden" aria-busy="true">
+                  <div class="spinner" aria-hidden="true"></div>
+                  <h2 class="pane-title">AI가 문맥과 위험 신호를 분석하고 있습니다</h2>
+                  <p class="state-desc">
+                    원문 표현을 대조해 허위 하이라이트가 없는지 함께 검증 중입니다.
+                  </p>
+                </div>
+
+                <!-- 3. 오류 및 오프라인 백업 안내 상태 -->
+                <div id="analyze-error" class="state-box hidden" role="alert">
+                  <h2 class="pane-title error-title">실시간 AI 분석을 완료하지 못했습니다</h2>
+                  <p id="analyze-error-message" class="state-desc"></p>
+                  <div class="error-actions">
+                    <button type="button" id="btn-retry-analyze" class="btn btn-primary btn-sm">
+                      다시 요청하기
+                    </button>
+                    <button type="button" id="btn-use-demo-analyze" class="btn btn-secondary btn-sm">
+                      시연용 고정 예시로 결과 보기
+                    </button>
+                  </div>
+                </div>
+
+                <!-- 4. 판별 완료 결과 화면 -->
+                <div id="analyze-result" class="result-content hidden">
+                  <div class="result-score-header">
+                    <div class="score-block">
+                      <span class="score-caption">스미싱 위험 점수</span>
+                      <div class="score-value-row">
+                        <strong id="res-score" class="score-number mono-num">0</strong>
+                        <span class="score-max mono-num">/ 100</span>
+                      </div>
+                    </div>
+
+                    <div class="grade-block">
+                      <div id="res-grade-badge" class="grade-indicator grade-safe">
+                        <span id="res-grade-icon" class="grade-icon" aria-hidden="true"></span>
+                        <span id="res-grade-text">안전</span>
+                      </div>
+                      <div class="result-meta-line">
+                        <span>유형: <strong id="res-scam-type">해당없음</strong></span>
+                        <span class="meta-sep" aria-hidden="true">·</span>
+                        <span id="res-source-label">OpenRouter 실시간 분석</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p id="res-summary" class="result-summary"></p>
+
+                  <!-- 원문 하이라이트 영역 -->
+                  <div class="result-section">
+                    <div class="section-subhead">
+                      <h3 class="sub-title">원문 위험 신호 하이라이트</h3>
+                      <span class="field-hint">하이라이트 문구를 누르면 아래 설명으로 이동합니다</span>
+                    </div>
+                    <div id="res-highlighted-text" class="highlighted-message"></div>
+                  </div>
+
+                  <!-- 탐지된 위험 신호 상세 목록 -->
+                  <div class="result-section">
+                    <h3 class="sub-title">탐지된 위험 표현 및 이유</h3>
+                    <ul id="res-signals-list" class="signals-list"></ul>
+                  </div>
+
+                  <!-- 권장 행동 안내 -->
+                  <div class="result-section">
+                    <h3 class="sub-title">지금 해야 할 행동 안내</h3>
+                    <ol id="res-advice-list" class="advice-list"></ol>
+                  </div>
+
+                  <!-- 판별 -> 훈련 연결 버튼 (P1 융합 기능) -->
+                  <div class="bridge-row">
+                    <div class="bridge-copy">
+                      <strong>같은 수법에 다시 속지 않도록 바로 연습해 보세요</strong>
+                      <span id="bridge-train-hint" class="field-hint">
+                        판별된 유형과 같은 시나리오로 대응 훈련을 시작합니다.
+                      </span>
+                    </div>
+                    <button type="button" id="btn-practice-similar" class="btn btn-primary">
+                      비슷한 수법 연습하기
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 패널 2: 대응 시나리오 훈련 모드 -->
+          <div
+            id="panel-train"
+            class="workbench-panel hidden"
+            role="tabpanel"
+            aria-labelledby="tab-train"
+          >
+            <!-- 훈련 조건 선택 막대 -->
+            <div class="surface-card train-controls-card">
+              <div class="train-control-group">
+                <label for="train-type-select" class="field-label">사기 유형</label>
+                <select id="train-type-select" class="select-control">
+                  <option value="기관사칭">기관사칭</option>
+                  <option value="택배">택배</option>
+                  <option value="지원금">지원금</option>
+                  <option value="지인사칭">지인사칭</option>
+                  <option value="대출">대출</option>
+                </select>
+              </div>
+
+              <div class="train-control-group">
+                <span class="field-label">난이도</span>
+                <div class="difficulty-group" role="group" aria-label="훈련 난이도 선택">
+                  <button type="button" class="diff-btn" data-diff="쉬움">쉬움</button>
+                  <button type="button" class="diff-btn is-active" data-diff="보통">보통</button>
+                  <button type="button" class="diff-btn" data-diff="어려움">어려움</button>
+                </div>
+              </div>
+
+              <div class="train-control-action">
+                <button type="button" id="btn-generate-scenario" class="btn btn-primary">
+                  새 가상 문자 생성
+                </button>
+              </div>
+            </div>
+
+            <!-- 훈련 시뮬레이션 2단 영역 -->
+            <div class="split-grid train-split">
+              <!-- 왼쪽: 가상 문자 수신 화면 및 5개 대응 선택지 -->
+              <div class="surface-card train-stage-pane">
+                <div class="pane-header">
+                  <div class="virtual-label-wrap">
+                    <span class="virtual-badge">교육용 가상 문자</span>
+                    <span class="field-hint">예약 도메인(example.com) · 가상 번호만 사용</span>
+                  </div>
+                  <span id="train-meta-tag" class="muted-meta">기관사칭 · 보통</span>
+                </div>
+
+                <!-- 로딩 상태 -->
+                <div id="train-loading" class="state-box hidden" aria-busy="true">
+                  <div class="spinner" aria-hidden="true"></div>
+                  <h2 class="pane-title">교육용 가상 문자를 생성하고 있습니다</h2>
+                  <p class="state-desc">
+                    실제 기관명과 URL을 제외한 안전한 가상 시나리오를 준비 중입니다.
+                  </p>
+                </div>
+
+                <!-- 오류 상태 -->
+                <div id="train-error" class="state-box hidden" role="alert">
+                  <h2 class="pane-title error-title">가상 문자 생성에 실패했습니다</h2>
+                  <p id="train-error-message" class="state-desc"></p>
+                  <div class="error-actions">
+                    <button type="button" id="btn-retry-train" class="btn btn-primary btn-sm">
+                      다시 생성하기
+                    </button>
+                    <button type="button" id="btn-use-demo-train" class="btn btn-secondary btn-sm">
+                      시연용 가상 문자 불러오기
+                    </button>
+                  </div>
+                </div>
+
+                <!-- 시나리오 본문 및 선택지 -->
+                <div id="train-scenario-view" class="train-scenario-view">
+                  <div class="sms-bubble" aria-label="훈련용 가상 수신 문자">
+                    <div class="sms-bubble-top">
+                      <span>발신: 000-0000-0000 (가상 번호)</span>
+                      <span id="train-source-label">교육용 시나리오</span>
+                    </div>
+                    <div id="train-message-box" class="sms-bubble-text"></div>
+                  </div>
+
+                  <div class="choices-section">
+                    <h3 class="sub-title">이 문자를 받았다면 어떻게 대응하시겠습니까?</h3>
+                    <div id="train-choices" class="choices-grid" role="group" aria-label="대응 방법 선택">
+                      <!-- JS에서 5개 선택지 버튼을 렌더링 -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 오른쪽: 채점 결과, 해설 및 판별 모드 복습 연결 -->
+              <div class="surface-card train-feedback-pane" aria-live="polite">
+                <div id="train-feedback-empty" class="state-box">
+                  <h2 class="pane-title">대응 방법을 선택해 주세요</h2>
+                  <p class="state-desc">
+                    왼쪽의 교육용 가상 문자를 주의 깊게 읽고, 가장 안전하다고 생각되는 행동 버튼을 누르면 즉시 정답 여부와 위험 신호 해설을 확인할 수 있습니다.
+                  </p>
+                </div>
+
+                <div id="train-feedback-result" class="result-content hidden">
+                  <div id="train-verdict-box" class="verdict-banner verdict-correct">
+                    <strong id="train-verdict-title">정답입니다</strong>
+                    <span id="train-verdict-score" class="mono-num">+20점</span>
+                  </div>
+
+                  <div class="result-section">
+                    <h3 class="sub-title">권장 대응 및 해설</h3>
+                    <p class="best-choices-line">
+                      가장 안전한 대응: <strong id="train-best-choices"></strong>
+                    </p>
+                    <p id="train-explanation" class="result-summary"></p>
+                  </div>
+
+                  <div class="result-section">
+                    <h3 class="sub-title">이 문자의 위험 신호</h3>
+                    <ul id="train-signals-list" class="signals-list"></ul>
+                  </div>
+
+                  <!-- 훈련 -> 판별 연결 버튼 (P1 융합 기능: 틀린 문제 복습) -->
+                  <div class="bridge-row">
+                    <div class="bridge-copy">
+                      <strong>어디가 위험 신호였는지 판별기에서 직접 비교해 보세요</strong>
+                      <span class="field-hint">이 가상 문자를 판별 모드로 보내 하이라이트를 다시 분석합니다.</span>
+                    </div>
+                    <div class="bridge-actions">
+                      <button type="button" id="btn-send-to-analyze" class="btn btn-secondary">
+                        판별 모드로 보내 분석하기
+                      </button>
+                      <button type="button" id="btn-next-scenario" class="btn btn-primary">
+                        다음 문제 풀기
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 위험 신호 가이드 섹션 -->
+      <section id="guide" class="guide-section" aria-labelledby="guide-title">
+        <div class="container">
+          <div class="section-header">
+            <h2 id="guide-title" class="section-title">스미싱 6대 위험 신호 기준</h2>
+            <p class="section-desc">
+              정부·공공기관의 공식 안내 문자는 인터넷 주소(URL)를 포함하지 않는 것이 원칙입니다. 아래 신호 중 2가지 이상이 겹치면 즉시 의심하세요.
+            </p>
+          </div>
+
+          <div class="guide-grid">
+            <article class="guide-item">
+              <h3 class="guide-item-title">01. 긴급성 압박</h3>
+              <p class="guide-item-desc">“오늘 자정까지”, “미확인 시 계좌 정지·압류”처럼 당황하게 만들어 확인 없이 누르게 합니다.</p>
+            </article>
+            <article class="guide-item">
+              <h3 class="guide-item-title">02. 기관·기업 사칭</h3>
+              <p class="guide-item-desc">검찰·경찰·국세청·건강보험·은행·택배사를 내세워 신뢰를 얻고 거부하기 어렵게 만듭니다.</p>
+            </article>
+            <article class="guide-item">
+              <h3 class="guide-item-title">03. 출처 불명 URL</h3>
+              <p class="guide-item-desc">단축 주소나 공식 도메인과 비슷한 가짜 주소를 넣어 피싱 사이트 접속을 유도합니다.</p>
+            </article>
+            <article class="guide-item">
+              <h3 class="guide-item-title">04. 앱 설치 유도</h3>
+              <p class="guide-item-desc">사건 열람이나 보안 점검을 이유로 설치 파일(.apk)이나 원격제어 앱 설치를 요구합니다.</p>
+            </article>
+            <article class="guide-item">
+              <h3 class="guide-item-title">05. 개인정보 요구</h3>
+              <p class="guide-item-desc">신분증 사진, 비밀번호, 일회용 인증번호, 계좌 비밀번호 입력을 요구하면 100% 의심해야 합니다.</p>
+            </article>
+            <article class="guide-item">
+              <h3 class="guide-item-title">06. 금전·송금 요구</h3>
+              <p class="guide-item-desc">합의금, 수수료, 상품권 핀번호, 가족을 사칭한 긴급 송금 요청은 반드시 전화로 직접 확인하세요.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- 예방 수칙 및 개인정보·면책 안내 섹션 -->
+      <section id="safety" class="safety-section" aria-labelledby="safety-title">
+        <div class="container">
+          <div class="surface-card safety-card">
+            <div class="safety-col">
+              <h2 id="safety-title" class="pane-title">개인정보 보호 및 안전 원칙</h2>
+              <p class="state-desc">
+                SafeText Trainer는 사용자가 입력한 문자 내용과 전화번호·계좌번호를 서버 데이터베이스에 저장하지 않습니다. 다만 무료 AI 모델 특성상 민감한 실명, 계좌번호, 전화번호는 입력 전 마스킹 버튼을 눌러 지운 뒤 분석하시길 권장합니다.
+              </p>
+            </div>
+            <div class="safety-col">
+              <h2 class="pane-title">피해 의심 시 즉시 연락처</h2>
+              <ul class="helpline-list">
+                <li><strong>118</strong> · 한국인터넷진흥원(KISA) 스미싱·해킹 신고 및 상담</li>
+                <li><strong>112</strong> · 경찰청 보이스피싱·사이버 범죄 신고</li>
+                <li><strong>1332</strong> · 금융감독원 금융사기 피해 상담 및 지급정지 문의</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
-  </div>
+    <!-- 바닥글 -->
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span>SafeText Trainer · 교육 목적 스미싱 판별·훈련 웹앱</span>
+        <span>참고용 판별이며 100% 정확하지 않음, 의심되면 118(KISA) 또는 112에 문의</span>
+      </div>
+    </footer>
 
-  <!-- 비즈니스 로직을 담당하는 자바스크립트 파일 연결 -->
-  <script src="script.js"></script>
-</body>
+    <!-- 순수 바닐라 자바스크립트 모듈 연결 -->
+    <script type="module" src="/script.js"></script>
+  </body>
 </html>
