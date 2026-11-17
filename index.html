@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- metadata.json과 동기화된 페이지 제목 및 검색/공유 메타데이터 -->
-    <title>SafeText Trainer — 스미싱 판별·훈련 웹앱</title>
+    <title>ClickCheck — 스마트 스미싱 판별·대응 훈련</title>
     <meta
       name="description"
-      content="의심 문자의 위험도와 위험 표현을 하이라이트로 분석하고, 같은 수법의 교육용 가상 문자로 대응을 연습하는 스미싱 판별·훈련 웹앱입니다."
+      content="클릭하기 전 의심 문자의 위험도와 위험 표현을 실시간으로 분석하고, 가상 문자로 안전한 대응 순서를 연습하는 신뢰할 수 있는 스미싱 예방 솔루션 ClickCheck입니다."
     />
-    <meta property="og:title" content="SafeText Trainer — 스미싱 판별·훈련 웹앱" />
+    <meta property="og:title" content="ClickCheck — 스마트 스미싱 판별·대응 훈련" />
     <meta
       property="og:description"
-      content="의심 문자의 위험도와 위험 표현을 하이라이트로 분석하고, 같은 수법의 교육용 가상 문자로 대응을 연습하는 스미싱 판별·훈련 웹앱입니다."
+      content="클릭하기 전 의심 문자의 위험도와 위험 표현을 실시간으로 분석하고, 가상 문자로 안전한 대응 순서를 연습하는 신뢰할 수 있는 스미싱 예방 솔루션 ClickCheck입니다."
     />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -34,7 +34,16 @@
     <!-- 상단 내비게이션: 브랜드 워드마크 · 4개 텍스트 링크 · 1개 주요 버튼의 3구역 구조 -->
     <header class="site-header">
       <div class="container header-inner">
-        <a href="#top" class="brand-wordmark">SafeText Trainer</a>
+        <a href="#top" class="brand-wordmark" aria-label="ClickCheck 홈으로 이동">
+          <span class="brand-logo-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </span>
+          <span class="brand-title">Click<span class="brand-title-accent">Check</span></span>
+          <span class="brand-badge">보안 안심</span>
+        </a>
 
         <nav class="main-nav" aria-label="주요 메뉴">
           <a href="#workspace" class="nav-link" data-nav-mode="analyze">문자 판별</a>
@@ -57,11 +66,20 @@
       <section class="intro-band" aria-labelledby="hero-title">
         <div class="container intro-inner">
           <div class="intro-copy">
+            <div class="trust-badge-wrap">
+              <span class="trust-badge">
+                <svg class="trust-badge-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path d="M8 0c-.2 0-.4.1-.6.2L1.4 3.7C1.1 3.9 1 4.2 1 4.5v4.8c0 4 3 7.7 7 8.7 4-1 7-4.7 7-8.7V4.5c0-.3-.1-.6-.4-.8L8.6.2C8.4.1 8.2 0 8 0zm0 2.2l5 2.5v4.6c0 3.2-2.3 6.1-5 7-2.7-.9-5-3.8-5-7V4.7l5-2.5z"/>
+                  <path d="M6.8 10.3L4.7 8.2a.75.75 0 0 1 1.06-1.06l1.04 1.04 3.54-3.54a.75.75 0 1 1 1.06 1.06l-4.07 4.07a.75.75 0 0 1-1.06 0z"/>
+                </svg>
+                AI 기반 실시간 스미싱 탐지 & 예방 훈련 솔루션
+              </span>
+            </div>
             <h1 id="hero-title" class="hero-title">
-              의심 문자는 바로 판별하고, 같은 수법은 훈련으로 익히세요
+              클릭하기 전에 검사하고,<br class="hero-title-br" />훈련으로 안전하게 대비하세요
             </h1>
             <p class="hero-desc">
-              링크를 누르기 전에 문맥 속 위험 표현을 하이라이트로 확인하고, 같은 유형의 교육용 가상 문자로 안전한 대응 순서를 연습할 수 있습니다.
+              문자 속 링크를 누르기 전, 위험한 표현을 정확하게 짚어내고 교육용 가상 문자로 안전한 대응 습관을 기릅니다.
             </p>
           </div>
 
@@ -236,8 +254,11 @@
                 </div>
 
                 <div class="submit-row">
-                  <button type="button" id="btn-analyze" class="btn btn-primary btn-lg">
-                    위험도 분석하기
+                  <button type="button" id="btn-analyze" class="btn btn-primary btn-lg btn-analyze">
+                    <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+                    </svg>
+                    <span>스미싱 위험도 정밀 분석하기</span>
                   </button>
                 </div>
               </div>
@@ -246,15 +267,34 @@
               <div class="surface-card result-pane" aria-live="polite">
                 <!-- 1. 초기 빈 상태 -->
                 <div id="analyze-empty" class="state-box">
-                  <h2 class="pane-title">판별 결과 대기 중</h2>
+                  <div class="empty-state-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="empty-badge-icon" aria-hidden="true">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                      <path d="m9 12 2 2 4-4"/>
+                    </svg>
+                    <span>ClickCheck AI 보안 엔진</span>
+                  </div>
+                  <h2 class="pane-title">스미싱 판별 결과 대기 중</h2>
                   <p class="state-desc">
-                    왼쪽 입력창에 의심 문자를 붙여넣거나 시연 예시를 선택해 분석을 시작하세요. AI가 다음 6가지 위험 신호를 문맥 중심으로 점검합니다.
+                    왼쪽 입력창에 의심 문자를 붙여넣거나 시연 예시를 선택해 보세요. AI 보안 엔진이 다음 4대 핵심 위험 신호를 정밀 검증합니다.
                   </p>
                   <ul class="criteria-preview-list">
-                    <li><strong>긴급성 압박</strong> · 즉시 확인·미납 시 불이익 등 조급함 유발</li>
-                    <li><strong>기관·지인 사칭</strong> · 공공기관·택배·은행·가족 등을 사칭</li>
-                    <li><strong>의심 URL 포함</strong> · 정부·공공기관 안내 문자는 URL을 포함하지 않음</li>
-                    <li><strong>앱 설치 및 정보 요구</strong> · APK 설치, 신분증·인증번호·송금 유도</li>
+                    <li>
+                      <span class="criteria-tag">신호 1</span>
+                      <div class="criteria-content"><strong>긴급성 압박</strong><span class="criteria-sub">즉시 확인·미납 시 불이익 등 조급함 유발</span></div>
+                    </li>
+                    <li>
+                      <span class="criteria-tag">신호 2</span>
+                      <div class="criteria-content"><strong>기관·지인 사칭</strong><span class="criteria-sub">공공기관·택배사·은행·가족 등을 사칭</span></div>
+                    </li>
+                    <li>
+                      <span class="criteria-tag">신호 3</span>
+                      <div class="criteria-content"><strong>의심 URL 포함</strong><span class="criteria-sub">정부·공공기관 공식 문자는 링크(URL)를 포함하지 않음</span></div>
+                    </li>
+                    <li>
+                      <span class="criteria-tag">신호 4</span>
+                      <div class="criteria-content"><strong>앱 설치 및 정보 요구</strong><span class="criteria-sub">APK 설치, 신분증·인증번호·비밀번호·송금 유도</span></div>
+                    </li>
                   </ul>
                 </div>
 
@@ -285,10 +325,13 @@
                 <div id="analyze-result" class="result-content hidden">
                   <div class="result-score-header">
                     <div class="score-block">
-                      <span class="score-caption">스미싱 위험 점수</span>
+                      <span class="score-caption">스미싱 위험 지수</span>
                       <div class="score-value-row">
                         <strong id="res-score" class="score-number mono-num">0</strong>
-                        <span class="score-max mono-num">/ 100</span>
+                        <span class="score-max mono-num">/ 100점</span>
+                      </div>
+                      <div class="score-meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="스미싱 위험 지수 게이지">
+                        <div id="res-score-bar" class="score-meter-fill"></div>
                       </div>
                     </div>
 
@@ -376,7 +419,10 @@
 
               <div class="train-control-action">
                 <button type="button" id="btn-generate-scenario" class="btn btn-primary">
-                  새 가상 문자 생성
+                  <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.45a.75.75 0 000-1.5H4.5a.75.75 0 00-.75.75v3.75a.75.75 0 001.5 0v-2.185l.332.332a7 7 0 0011.838-3.15.75.75 0 00-1.108-.892zM4.688 8.576a5.5 5.5 0 019.201-2.466l.312.311h-2.45a.75.75 0 000 1.5H15.5a.75.75 0 00.75-.75V3.42a.75.75 0 00-1.5 0v2.185l-.332-.332a7 7 0 00-11.838 3.15.75.75 0 001.108.893z" clip-rule="evenodd"/>
+                  </svg>
+                  <span>새 가상 문자 생성</span>
                 </button>
               </div>
             </div>
@@ -438,6 +484,12 @@
               <!-- 오른쪽: 채점 결과, 해설 및 판별 모드 복습 연결 -->
               <div class="surface-card train-feedback-pane" aria-live="polite">
                 <div id="train-feedback-empty" class="state-box">
+                  <div class="empty-state-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="empty-badge-icon" aria-hidden="true">
+                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                    </svg>
+                    <span>ClickCheck 실전 대응 시뮬레이션</span>
+                  </div>
                   <h2 class="pane-title">대응 방법을 선택해 주세요</h2>
                   <p class="state-desc">
                     왼쪽의 교육용 가상 문자를 주의 깊게 읽고, 가장 안전하다고 생각되는 행동 버튼을 누르면 즉시 정답 여부와 위험 신호 해설을 확인할 수 있습니다.
@@ -531,15 +583,15 @@
             <div class="safety-col">
               <h2 id="safety-title" class="pane-title">개인정보 보호 및 안전 원칙</h2>
               <p class="state-desc">
-                SafeText Trainer는 사용자가 입력한 문자 내용과 전화번호·계좌번호를 서버 데이터베이스에 저장하지 않습니다. 다만 무료 AI 모델 특성상 민감한 실명, 계좌번호, 전화번호는 입력 전 마스킹 버튼을 눌러 지운 뒤 분석하시길 권장합니다.
+                ClickCheck는 사용자가 입력한 문자 내용과 전화번호·계좌번호를 서버 데이터베이스에 영구 저장하지 않습니다. 다만 안전한 보안 습관을 위해 민감한 실명, 계좌번호, 전화번호는 입력 전 개인정보 자동 마스킹 버튼을 눌러 지운 뒤 분석하시길 권장합니다.
               </p>
             </div>
             <div class="safety-col">
               <h2 class="pane-title">피해 의심 시 즉시 연락처</h2>
               <ul class="helpline-list">
-                <li><strong>118</strong> · 한국인터넷진흥원(KISA) 스미싱·해킹 신고 및 상담</li>
-                <li><strong>112</strong> · 경찰청 보이스피싱·사이버 범죄 신고</li>
-                <li><strong>1332</strong> · 금융감독원 금융사기 피해 상담 및 지급정지 문의</li>
+                <li><strong class="helpline-num">118</strong> · 한국인터넷진흥원(KISA) 스미싱·해킹 신고 및 상담</li>
+                <li><strong class="helpline-num">112</strong> · 경찰청 보이스피싱·사이버 범죄 신고</li>
+                <li><strong class="helpline-num">1332</strong> · 금융감독원 금융사기 피해 상담 및 지급정지 문의</li>
               </ul>
             </div>
           </div>
@@ -550,8 +602,13 @@
     <!-- 바닥글 -->
     <footer class="site-footer">
       <div class="container footer-inner">
-        <span>SafeText Trainer · 교육 목적 스미싱 판별·훈련 웹앱</span>
-        <span>참고용 판별이며 100% 정확하지 않음, 의심되면 118(KISA) 또는 112에 문의</span>
+        <div class="footer-brand">
+          <span class="footer-logo">ClickCheck</span>
+          <span class="footer-tagline">신뢰할 수 있는 스마트 스미싱 판별 & 대응 훈련 솔루션</span>
+        </div>
+        <div class="footer-meta">
+          <span>참고용 판별이며 100% 정확하지 않음, 의심되면 118(KISA) 또는 112에 문의하세요.</span>
+        </div>
       </div>
     </footer>
 

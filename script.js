@@ -1,5 +1,5 @@
 /**
- * SafeText Trainer 프론트엔드 순수 자바스크립트 모듈
+ * ClickCheck 프론트엔드 순수 자바스크립트 모듈
  * - 외부 프레임워크나 빌드 도구 없이 브라우저 DOM API만으로 판별·훈련·융합 흐름을 제어합니다.
  * - OpenRouter API는 직접 호출하지 않고 반드시 /api/* 서버리스 엔드포인트를 통해서만 통신합니다.
  */
@@ -291,6 +291,7 @@ function initDomRefs() {
     analyzeResult: document.getElementById('analyze-result'),
 
     resScore: document.getElementById('res-score'),
+    resScoreBar: document.getElementById('res-score-bar'),
     resGradeBadge: document.getElementById('res-grade-badge'),
     resGradeIcon: document.getElementById('res-grade-icon'),
     resGradeText: document.getElementById('res-grade-text'),
@@ -347,7 +348,9 @@ export function maskPersonalInfo(text) {
  */
 function loadSessionStats() {
   try {
-    const saved = sessionStorage.getItem('safetext_session_stats');
+    const saved =
+      sessionStorage.getItem('clickcheck_session_stats') ||
+      sessionStorage.getItem('safetext_session_stats');
     if (saved) {
       const parsed = JSON.parse(saved);
       if (
@@ -374,7 +377,7 @@ function renderSessionStats() {
   el.statAccuracy.textContent = total > 0 ? `${Math.round((correct / total) * 100)}%` : '—';
 
   try {
-    sessionStorage.setItem('safetext_session_stats', JSON.stringify(state.sessionStats));
+    sessionStorage.setItem('clickcheck_session_stats', JSON.stringify(state.sessionStats));
   } catch {
     // 무시
   }
@@ -617,6 +620,17 @@ function renderAnalyzeResult(result, meta) {
   state.lastAnalyzeResult = { data: result, meta };
 
   el.resScore.textContent = String(result.risk_score);
+  if (el.resScoreBar) {
+    el.resScoreBar.style.width = `${Math.min(100, Math.max(0, result.risk_score))}%`;
+    el.resScoreBar.classList.remove('bar-safe', 'bar-caution', 'bar-danger');
+    if (result.risk_level === '위험') {
+      el.resScoreBar.classList.add('bar-danger');
+    } else if (result.risk_level === '주의') {
+      el.resScoreBar.classList.add('bar-caution');
+    } else {
+      el.resScoreBar.classList.add('bar-safe');
+    }
+  }
   el.resGradeText.textContent = result.risk_level;
   el.resGradeIcon.innerHTML = getGradeIconSvg(result.risk_level);
 

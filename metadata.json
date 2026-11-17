@@ -1,6 +1,6 @@
 {
-  "name": "SafeText Trainer",
-  "description": "의심 문자의 위험도와 위험 표현을 하이라이트로 분석하고, 같은 수법의 교육용 가상 문자로 대응을 연습하는 스미싱 판별·훈련 웹앱입니다.",
+  "name": "ClickCheck",
+  "description": "클릭하기 전 의심 문자의 위험도와 위험 표현을 실시간으로 분석하고, 같은 수법의 가상 문자로 안전한 대응 순서를 연습하는 신뢰할 수 있는 스미싱 예방 솔루션입니다.",
   "requestFramePermissions": [],
   "majorCapabilities": []
 }
