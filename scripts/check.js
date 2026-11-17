@@ -16,8 +16,11 @@ const requiredFiles = [
   'style.css',
   'script.js',
   'api/_openrouter.js',
+  'api/_supabase.js',
   'api/analyze.js',
   'api/train.js',
+  'api/cases.js',
+  'api/signal-sample.js',
   'api/health.js'
 ];
 
@@ -25,8 +28,11 @@ const requiredFiles = [
 const jsFiles = [
   'script.js',
   'api/_openrouter.js',
+  'api/_supabase.js',
   'api/analyze.js',
   'api/train.js',
+  'api/cases.js',
+  'api/signal-sample.js',
   'api/health.js',
   'scripts/local-server.js',
   'tests/safetext.test.js'
@@ -49,11 +55,16 @@ for (const relPath of jsFiles) {
   }
 }
 
-// 3. 클라이언트 코드(script.js)에 OpenRouter 키/직접 호출이 섞이지 않았는지 점검
+// 3. 클라이언트 코드(script.js)에 OpenRouter·Supabase 서버 키/직접 호출이 섞이지 않았는지 점검
 const clientCode = fs.readFileSync(path.join(rootDir, 'script.js'), 'utf8');
-if (clientCode.includes('openrouter.ai') || clientCode.includes('process.env.OPENROUTER_API_KEY')) {
-  console.error('[보안 검증 실패] 브라우저 코드(script.js)에서 OpenRouter를 직접 참조할 수 없습니다.');
+if (
+  clientCode.includes('openrouter.ai') ||
+  clientCode.includes('process.env.OPENROUTER_API_KEY') ||
+  clientCode.includes('SUPABASE_SERVICE_ROLE_KEY')
+) {
+  console.error('[보안 검증 실패] 브라우저 코드(script.js)에서 서버 API 키나 OpenRouter를 직접 참조할 수 없습니다.');
   process.exit(1);
 }
 
 console.log('[검증 통과] 순수 HTML/CSS/JS 및 Vercel 서버리스 API 구문 검사를 완료했습니다.');
+

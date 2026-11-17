@@ -1,9 +1,10 @@
 /**
- * Vercel 서버리스 함수: 서버 상태 및 OpenRouter 설정 여부 확인 (/api/health)
+ * Vercel 서버리스 함수: 서버 상태, OpenRouter 및 Supabase 설정 여부 확인 (/api/health)
  * 보안상 실제 API 키 문자열은 절대 반환하지 않고 설정 여부(boolean)만 알려줍니다.
  */
 
 import { getOpenRouterModel } from './_openrouter.js';
+import { isSupabaseConfigured } from './_supabase.js';
 
 /**
  * Vercel 서버리스 핸들러 함수
@@ -22,6 +23,8 @@ export default async function handler(req, res) {
   return res.status(200).json({
     ok: true,
     hasApiKey,
+    supabaseConfigured: isSupabaseConfigured(),
     model: getOpenRouterModel()
   });
 }
+

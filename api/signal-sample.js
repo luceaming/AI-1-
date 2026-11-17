@@ -118,7 +118,7 @@ function wrapSvgText(text, maxCharsPerLine = 22) {
     }
     let sliceEnd = maxCharsPerLine;
     const spaceIndex = remaining.lastIndexOf(' ', maxCharsPerLine);
-    if (spaceIndex > maxCharsPerLine * 0.6) {
+    if (spaceIndex > maxCharsPerLine * 0.45) {
       sliceEnd = spaceIndex;
     }
     lines.push(remaining.slice(0, sliceEnd).trim());
@@ -238,16 +238,16 @@ export function generateSignalSampleSvg(sample) {
   <!-- 9. 위험 신호 하이라이트 분석 박스 (말풍선 하단 부착) -->
   <g transform="translate(30, ${176 + bubbleHeight})">
     <rect x="0" y="0" width="320" height="66" rx="8" fill="#fff1f2" stroke="#fda4af" stroke-width="1.2" />
-    <text x="12" y="20" font-family="-apple-system, sans-serif" font-size="10.5" font-weight="800" fill="#be123c">🔍 위험 신호 핵심 분석</text>
+    <text x="12" y="20" font-family="-apple-system, sans-serif" font-size="10.5" font-weight="800" fill="#be123c">위험 신호 핵심 분석</text>
     <text x="12" y="37" font-family="-apple-system, sans-serif" font-size="10.5" font-weight="600" fill="#881337">수법: ${threatType}</text>
-    <text x="12" y="53" font-family="-apple-system, sans-serif" font-size="9.5" fill="#9f1239">핵심 구문: "${escapeXml(highlightPhrase.slice(0, 26))}${highlightPhrase.length > 26 ? '...' : ''}"</text>
+    <text x="12" y="53" font-family="-apple-system, sans-serif" font-size="9.5" fill="#9f1239">핵심 구문: "${escapeXml(highlightPhrase.slice(0, 22))}${highlightPhrase.length > 22 ? '...' : ''}"</text>
   </g>
 
   <!-- 10. 안전 교육용 가상 시나리오 워터마크 -->
   <g transform="translate(30, 484)">
-    <rect x="0" y="0" width="320" height="32" rx="6" fill="#e2e8f0" />
-    <text x="160" y="20" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" font-weight="600" fill="#475569">
-      🛡️ SafeText AI 안전 교육용 가상 이미지 (Gemma 4)
+    <rect x="0" y="0" width="320" height="32" rx="6" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1" />
+    <text x="160" y="20" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" font-weight="700" fill="#1e40af">
+      ClickCheck AI 안전 교육용 가상 이미지 (Gemma 4)
     </text>
   </g>
 

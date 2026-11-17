@@ -544,8 +544,8 @@ export async function callOpenRouterJson({
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${apiKey}`,
-          'HTTP-Referer': process.env.APP_URL || 'https://safetext-trainer.vercel.app',
-          'X-Title': 'SafeText Trainer'
+          'HTTP-Referer': process.env.APP_URL || 'https://clickcheck.vercel.app',
+          'X-Title': 'ClickCheck'
         },
         body: JSON.stringify({
           model: targetModel,

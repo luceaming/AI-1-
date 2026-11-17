@@ -13,6 +13,7 @@ import analyzeHandler from '../api/analyze.js';
 import trainHandler from '../api/train.js';
 import healthHandler from '../api/health.js';
 import signalSampleHandler from '../api/signal-sample.js';
+import casesHandler from '../api/cases.js';
 
 // 현재 파일 기준 프로젝트 루트 경로 계산
 const __filename = fileURLToPath(import.meta.url);
@@ -109,9 +110,12 @@ const server = http.createServer(async (req, res) => {
   if (pathname === '/api/signal-sample') {
     return signalSampleHandler(req, adaptVercelResponse(res));
   }
+  if (pathname === '/api/cases') {
+    return casesHandler(req, adaptVercelResponse(res));
+  }
 
-  // 2. 정적 파일 서빙 (보안상 .env, api/, scripts/ 직접 접근 차단)
-  const blockedPrefixes = ['/api/', '/scripts/', '/tests/', '/.env', '/package.json'];
+  // 2. 정적 파일 서빙 (보안상 .env, api/, scripts/, supabase/ 직접 접근 차단)
+  const blockedPrefixes = ['/api/', '/scripts/', '/tests/', '/supabase/', '/.env', '/package.json'];
   if (blockedPrefixes.some((prefix) => pathname.startsWith(prefix))) {
     res.statusCode = 403;
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
@@ -144,5 +148,5 @@ const server = http.createServer(async (req, res) => {
 
 const PORT = Number(process.env.PORT || 3000);
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`SafeText Trainer 로컬 서버 실행 중: http://0.0.0.0:${PORT}`);
+  console.log(`ClickCheck 로컬 서버 실행 중: http://0.0.0.0:${PORT}`);
 });

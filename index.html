@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- metadata.json과 동기화된 페이지 제목 및 검색/공유 메타데이터 -->
-    <title>ClickCheck — 스마트 스미싱 판별·대응 훈련</title>
+    <title>ClickCheck — 스미싱 판별·훈련 솔루션</title>
     <meta
       name="description"
-      content="클릭하기 전 의심 문자의 위험도와 위험 표현을 실시간으로 분석하고, 가상 문자로 안전한 대응 순서를 연습하는 신뢰할 수 있는 스미싱 예방 솔루션 ClickCheck입니다."
+      content="클릭하기 전 의심 문자의 위험도와 위험 표현을 실시간으로 분석하고, 같은 수법의 가상 문자로 안전한 대응 순서를 연습하는 신뢰할 수 있는 스미싱 예방 솔루션입니다."
     />
-    <meta property="og:title" content="ClickCheck — 스마트 스미싱 판별·대응 훈련" />
+    <meta property="og:title" content="ClickCheck — 스미싱 판별·훈련 솔루션" />
     <meta
       property="og:description"
-      content="클릭하기 전 의심 문자의 위험도와 위험 표현을 실시간으로 분석하고, 가상 문자로 안전한 대응 순서를 연습하는 신뢰할 수 있는 스미싱 예방 솔루션 ClickCheck입니다."
+      content="클릭하기 전 의심 문자의 위험도와 위험 표현을 실시간으로 분석하고, 같은 수법의 가상 문자로 안전한 대응 순서를 연습하는 신뢰할 수 있는 스미싱 예방 솔루션입니다."
     />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -34,15 +34,21 @@
     <!-- 상단 내비게이션: 브랜드 워드마크 · 4개 텍스트 링크 · 1개 주요 버튼의 3구역 구조 -->
     <header class="site-header">
       <div class="container header-inner">
-        <a href="#top" class="brand-wordmark" aria-label="ClickCheck 홈으로 이동">
-          <span class="brand-logo-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              <path d="m9 12 2 2 4-4"/>
-            </svg>
-          </span>
-          <span class="brand-title">Click<span class="brand-title-accent">Check</span></span>
-          <span class="brand-badge">보안 안심</span>
+        <a href="#top" class="brand-wordmark" aria-label="ClickCheck 홈">
+          <svg class="brand-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M12 2.5L4.5 5.8V11.6C4.5 16.4 7.7 20.6 12 22C16.3 20.6 19.5 16.4 19.5 11.6V5.8L12 2.5Z"
+              fill="#2563EB"
+            />
+            <path
+              d="M8.8 12.2L11 14.4L15.4 9.8"
+              stroke="#FFFFFF"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span>Click<span class="brand-accent">Check</span></span>
         </a>
 
         <nav class="main-nav" aria-label="주요 메뉴">
@@ -66,20 +72,11 @@
       <section class="intro-band" aria-labelledby="hero-title">
         <div class="container intro-inner">
           <div class="intro-copy">
-            <div class="trust-badge-wrap">
-              <span class="trust-badge">
-                <svg class="trust-badge-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                  <path d="M8 0c-.2 0-.4.1-.6.2L1.4 3.7C1.1 3.9 1 4.2 1 4.5v4.8c0 4 3 7.7 7 8.7 4-1 7-4.7 7-8.7V4.5c0-.3-.1-.6-.4-.8L8.6.2C8.4.1 8.2 0 8 0zm0 2.2l5 2.5v4.6c0 3.2-2.3 6.1-5 7-2.7-.9-5-3.8-5-7V4.7l5-2.5z"/>
-                  <path d="M6.8 10.3L4.7 8.2a.75.75 0 0 1 1.06-1.06l1.04 1.04 3.54-3.54a.75.75 0 1 1 1.06 1.06l-4.07 4.07a.75.75 0 0 1-1.06 0z"/>
-                </svg>
-                AI 기반 실시간 스미싱 탐지 & 예방 훈련 솔루션
-              </span>
-            </div>
             <h1 id="hero-title" class="hero-title">
-              클릭하기 전에 검사하고,<br class="hero-title-br" />훈련으로 안전하게 대비하세요
+              의심 문자는 바로 판별하고, 같은 수법은 훈련으로 익히세요
             </h1>
             <p class="hero-desc">
-              문자 속 링크를 누르기 전, 위험한 표현을 정확하게 짚어내고 교육용 가상 문자로 안전한 대응 습관을 기릅니다.
+              링크를 누르기 전에 문맥 속 위험 표현을 하이라이트로 확인하고, 같은 유형의 교육용 가상 문자로 안전한 대응 순서를 연습할 수 있습니다.
             </p>
           </div>
 
@@ -101,6 +98,19 @@
               <span>정답률 <strong id="stat-accuracy" class="mono-num">—</strong></span>
               <span class="meta-sep" aria-hidden="true">·</span>
               <span>완료 <strong id="stat-count" class="mono-num">0</strong>회</span>
+              <button
+                type="button"
+                id="btn-reset-stats"
+                class="btn-reset-stats"
+                title="누적 점수, 정답률, 완료 수 초기화"
+                aria-label="누적 점수, 정답률, 완료 수 초기화"
+              >
+                <svg class="icon-reset" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                  <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                </svg>
+                초기화
+              </button>
             </div>
           </div>
         </div>
@@ -203,11 +213,15 @@
                   placeholder="받은 문자 메시지를 그대로 붙여넣으세요. 예: [○○기관] 본인 확인 필요..."
                 ></textarea>
 
-                <!-- 개인정보 지우기 안내 및 자동 마스킹 도구 (PRD 6 반영) -->
+                <!-- 개인정보 지우기 안내, 학습 DB 저장 동의 및 자동 마스킹 도구 -->
                 <div class="privacy-row">
                   <p class="privacy-note">
-                    개인정보(이름·전화번호·계좌번호)는 지우고 입력해 주세요. 입력 문자는 서버에 저장되지 않습니다.
+                    이름·전화번호·계좌번호는 자동 마스킹 후 비식별 텍스트만 학습 사례 DB에 저장되며, 첨부한 원본 캡처 이미지는 저장되지 않습니다.
                   </p>
+                  <label class="kb-consent-label" for="chk-save-kb">
+                    <input type="checkbox" id="chk-save-kb" checked />
+                    <span>비식별 텍스트(이미지 변환 포함)를 Supabase 학습 사례로 저장해 AI 판별에 활용</span>
+                  </label>
                   <div class="privacy-actions">
                     <button type="button" id="btn-mask-pii" class="btn btn-ghost btn-sm">
                       개인정보 자동 마스킹
@@ -254,11 +268,8 @@
                 </div>
 
                 <div class="submit-row">
-                  <button type="button" id="btn-analyze" class="btn btn-primary btn-lg btn-analyze">
-                    <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                      <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
-                    </svg>
-                    <span>스미싱 위험도 정밀 분석하기</span>
+                  <button type="button" id="btn-analyze" class="btn btn-primary btn-lg">
+                    위험도 분석하기
                   </button>
                 </div>
               </div>
@@ -267,34 +278,15 @@
               <div class="surface-card result-pane" aria-live="polite">
                 <!-- 1. 초기 빈 상태 -->
                 <div id="analyze-empty" class="state-box">
-                  <div class="empty-state-badge">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="empty-badge-icon" aria-hidden="true">
-                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                      <path d="m9 12 2 2 4-4"/>
-                    </svg>
-                    <span>ClickCheck AI 보안 엔진</span>
-                  </div>
-                  <h2 class="pane-title">스미싱 판별 결과 대기 중</h2>
+                  <h2 class="pane-title">판별 결과 대기 중</h2>
                   <p class="state-desc">
-                    왼쪽 입력창에 의심 문자를 붙여넣거나 시연 예시를 선택해 보세요. AI 보안 엔진이 다음 4대 핵심 위험 신호를 정밀 검증합니다.
+                    왼쪽 입력창에 의심 문자를 붙여넣거나 시연 예시를 선택해 분석을 시작하세요. AI가 다음 6가지 위험 신호를 문맥 중심으로 점검합니다.
                   </p>
                   <ul class="criteria-preview-list">
-                    <li>
-                      <span class="criteria-tag">신호 1</span>
-                      <div class="criteria-content"><strong>긴급성 압박</strong><span class="criteria-sub">즉시 확인·미납 시 불이익 등 조급함 유발</span></div>
-                    </li>
-                    <li>
-                      <span class="criteria-tag">신호 2</span>
-                      <div class="criteria-content"><strong>기관·지인 사칭</strong><span class="criteria-sub">공공기관·택배사·은행·가족 등을 사칭</span></div>
-                    </li>
-                    <li>
-                      <span class="criteria-tag">신호 3</span>
-                      <div class="criteria-content"><strong>의심 URL 포함</strong><span class="criteria-sub">정부·공공기관 공식 문자는 링크(URL)를 포함하지 않음</span></div>
-                    </li>
-                    <li>
-                      <span class="criteria-tag">신호 4</span>
-                      <div class="criteria-content"><strong>앱 설치 및 정보 요구</strong><span class="criteria-sub">APK 설치, 신분증·인증번호·비밀번호·송금 유도</span></div>
-                    </li>
+                    <li><strong>긴급성 압박</strong> · 즉시 확인·미납 시 불이익 등 조급함 유발</li>
+                    <li><strong>기관·지인 사칭</strong> · 공공기관·택배·은행·가족 등을 사칭</li>
+                    <li><strong>의심 URL 포함</strong> · 정부·공공기관 안내 문자는 URL을 포함하지 않음</li>
+                    <li><strong>앱 설치 및 정보 요구</strong> · APK 설치, 신분증·인증번호·송금 유도</li>
                   </ul>
                 </div>
 
@@ -325,13 +317,10 @@
                 <div id="analyze-result" class="result-content hidden">
                   <div class="result-score-header">
                     <div class="score-block">
-                      <span class="score-caption">스미싱 위험 지수</span>
+                      <span class="score-caption">스미싱 위험 점수</span>
                       <div class="score-value-row">
                         <strong id="res-score" class="score-number mono-num">0</strong>
-                        <span class="score-max mono-num">/ 100점</span>
-                      </div>
-                      <div class="score-meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="스미싱 위험 지수 게이지">
-                        <div id="res-score-bar" class="score-meter-fill"></div>
+                        <span class="score-max mono-num">/ 100</span>
                       </div>
                     </div>
 
@@ -354,7 +343,7 @@
                   <div class="result-section">
                     <div class="section-subhead">
                       <h3 class="sub-title">원문 위험 신호 하이라이트</h3>
-                      <span class="field-hint">하이라이트 문구를 누르면 아래 설명으로 이동합니다</span>
+                      <span id="res-highlight-caption" class="field-hint">하이라이트 문구를 누르면 아래 설명으로 이동합니다</span>
                     </div>
                     <div id="res-highlighted-text" class="highlighted-message"></div>
                   </div>
@@ -419,10 +408,7 @@
 
               <div class="train-control-action">
                 <button type="button" id="btn-generate-scenario" class="btn btn-primary">
-                  <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.45a.75.75 0 000-1.5H4.5a.75.75 0 00-.75.75v3.75a.75.75 0 001.5 0v-2.185l.332.332a7 7 0 0011.838-3.15.75.75 0 00-1.108-.892zM4.688 8.576a5.5 5.5 0 019.201-2.466l.312.311h-2.45a.75.75 0 000 1.5H15.5a.75.75 0 00.75-.75V3.42a.75.75 0 00-1.5 0v2.185l-.332-.332a7 7 0 00-11.838 3.15.75.75 0 001.108.893z" clip-rule="evenodd"/>
-                  </svg>
-                  <span>새 가상 문자 생성</span>
+                  새 가상 문자 생성
                 </button>
               </div>
             </div>
@@ -484,12 +470,6 @@
               <!-- 오른쪽: 채점 결과, 해설 및 판별 모드 복습 연결 -->
               <div class="surface-card train-feedback-pane" aria-live="polite">
                 <div id="train-feedback-empty" class="state-box">
-                  <div class="empty-state-badge">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="empty-badge-icon" aria-hidden="true">
-                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-                    </svg>
-                    <span>ClickCheck 실전 대응 시뮬레이션</span>
-                  </div>
                   <h2 class="pane-title">대응 방법을 선택해 주세요</h2>
                   <p class="state-desc">
                     왼쪽의 교육용 가상 문자를 주의 깊게 읽고, 가장 안전하다고 생각되는 행동 버튼을 누르면 즉시 정답 여부와 위험 신호 해설을 확인할 수 있습니다.
@@ -537,6 +517,66 @@
         </div>
       </section>
 
+      <!-- Supabase 누적 학습 사례(RAG) 섹션 -->
+      <section id="knowledge" class="knowledge-section" aria-labelledby="knowledge-title">
+        <div class="container">
+          <div class="knowledge-header">
+            <div class="section-header knowledge-title-block">
+              <h2 id="knowledge-title" class="section-title">누적 학습 사례 라이브러리 (Supabase RAG)</h2>
+              <p class="section-desc">
+                사용자가 입력한 문자와 캡처 이미지에서 추출한 텍스트를 개인정보 마스킹 후 Supabase에 축적해, Gemma 4가 새 문자를 판별하거나 훈련 문자를 출제할 때 유사 사례로 참고합니다.
+              </p>
+            </div>
+
+            <div class="knowledge-toolbar">
+              <div class="knowledge-stats" aria-live="polite">
+                <span>누적 사례 <strong id="kb-total-count" class="mono-num">0</strong>건</span>
+                <span class="meta-sep" aria-hidden="true">·</span>
+                <span>이미지 변환 <strong id="kb-image-count" class="mono-num">0</strong>건</span>
+              </div>
+
+              <label for="kb-type-filter" class="sr-only">사례 유형 필터</label>
+              <select id="kb-type-filter" class="select-control select-sm">
+                <option value="">전체 유형</option>
+                <option value="기관사칭">기관사칭</option>
+                <option value="택배">택배</option>
+                <option value="지원금">지원금</option>
+                <option value="지인사칭">지인사칭</option>
+                <option value="대출">대출</option>
+                <option value="기타">기타</option>
+                <option value="해당없음">해당없음</option>
+              </select>
+
+              <button type="button" id="btn-refresh-kb" class="btn btn-secondary btn-sm">
+                새로고침
+              </button>
+            </div>
+          </div>
+
+          <!-- Supabase 환경 변수 미설정 시 안내 카드 -->
+          <div id="kb-setup-guide" class="surface-card kb-setup-card hidden">
+            <h3 class="pane-title">Supabase 연동을 연결하면 누적 학습(RAG)이 자동으로 작동합니다</h3>
+            <p class="state-desc">
+              현재 서버에 Supabase 연결 정보(<code>SUPABASE_URL</code>, <code>SUPABASE_SERVICE_ROLE_KEY</code>)가 아직 등록되지 않아 DB 저장은 대기 중입니다. 아래 2단계만 설정하면 텍스트와 이미지 변환 텍스트가 자동 저장·재활용됩니다.
+            </p>
+            <ol class="kb-step-list">
+              <li>Supabase SQL Editor에서 저장소의 <code>supabase/schema.sql</code> 파일 내용을 실행해 <code>smishing_cases</code> 테이블을 생성하세요.</li>
+              <li><code>.env.local</code> 및 Vercel 프로젝트 환경 변수에 <code>SUPABASE_URL</code>과 <code>SUPABASE_SERVICE_ROLE_KEY</code>를 등록하세요.</li>
+            </ol>
+          </div>
+
+          <!-- 연동은 되었으나 아직 사례가 없는 경우 -->
+          <div id="kb-empty-msg" class="surface-card kb-empty-card hidden">
+            <p class="state-desc">
+              아직 조건에 맞는 저장 사례가 없습니다. 위 판별 모드에서 문자나 캡처 이미지를 분석하면 비식별 텍스트가 자동으로 축적됩니다.
+            </p>
+          </div>
+
+          <!-- 누적 사례 카드 그리드 -->
+          <div id="kb-cases-grid" class="kb-cases-grid"></div>
+        </div>
+      </section>
+
       <!-- 위험 신호 가이드 섹션 -->
       <section id="guide" class="guide-section" aria-labelledby="guide-title">
         <div class="container">
@@ -548,29 +588,88 @@
           </div>
 
           <div class="guide-grid">
-            <article class="guide-item">
-              <h3 class="guide-item-title">01. 긴급성 압박</h3>
+            <article class="guide-item guide-clickable" data-signal-id="01" data-signal-name="긴급성 압박" role="button" tabindex="0" aria-haspopup="dialog">
+              <div class="guide-item-top">
+                <h3 class="guide-item-title">01. 긴급성 압박</h3>
+                <span class="guide-tag">예시 보기</span>
+              </div>
               <p class="guide-item-desc">“오늘 자정까지”, “미확인 시 계좌 정지·압류”처럼 당황하게 만들어 확인 없이 누르게 합니다.</p>
+              <div class="guide-action-pill">
+                <span>가상의 예시 이미지 보기</span>
+                <svg class="icon-arrow" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+                </svg>
+              </div>
             </article>
-            <article class="guide-item">
-              <h3 class="guide-item-title">02. 기관·기업 사칭</h3>
+
+            <article class="guide-item guide-clickable" data-signal-id="02" data-signal-name="기관·기업 사칭" role="button" tabindex="0" aria-haspopup="dialog">
+              <div class="guide-item-top">
+                <h3 class="guide-item-title">02. 기관·기업 사칭</h3>
+                <span class="guide-tag">예시 보기</span>
+              </div>
               <p class="guide-item-desc">검찰·경찰·국세청·건강보험·은행·택배사를 내세워 신뢰를 얻고 거부하기 어렵게 만듭니다.</p>
+              <div class="guide-action-pill">
+                <span>가상의 예시 이미지 보기</span>
+                <svg class="icon-arrow" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+                </svg>
+              </div>
             </article>
-            <article class="guide-item">
-              <h3 class="guide-item-title">03. 출처 불명 URL</h3>
+
+            <article class="guide-item guide-clickable" data-signal-id="03" data-signal-name="출처 불명 URL" role="button" tabindex="0" aria-haspopup="dialog">
+              <div class="guide-item-top">
+                <h3 class="guide-item-title">03. 출처 불명 URL</h3>
+                <span class="guide-tag">예시 보기</span>
+              </div>
               <p class="guide-item-desc">단축 주소나 공식 도메인과 비슷한 가짜 주소를 넣어 피싱 사이트 접속을 유도합니다.</p>
+              <div class="guide-action-pill">
+                <span>가상의 예시 이미지 보기</span>
+                <svg class="icon-arrow" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+                </svg>
+              </div>
             </article>
-            <article class="guide-item">
-              <h3 class="guide-item-title">04. 앱 설치 유도</h3>
+
+            <article class="guide-item guide-clickable" data-signal-id="04" data-signal-name="앱 설치 유도" role="button" tabindex="0" aria-haspopup="dialog">
+              <div class="guide-item-top">
+                <h3 class="guide-item-title">04. 앱 설치 유도</h3>
+                <span class="guide-tag">예시 보기</span>
+              </div>
               <p class="guide-item-desc">사건 열람이나 보안 점검을 이유로 설치 파일(.apk)이나 원격제어 앱 설치를 요구합니다.</p>
+              <div class="guide-action-pill">
+                <span>가상의 예시 이미지 보기</span>
+                <svg class="icon-arrow" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+                </svg>
+              </div>
             </article>
-            <article class="guide-item">
-              <h3 class="guide-item-title">05. 개인정보 요구</h3>
+
+            <article class="guide-item guide-clickable" data-signal-id="05" data-signal-name="개인정보 요구" role="button" tabindex="0" aria-haspopup="dialog">
+              <div class="guide-item-top">
+                <h3 class="guide-item-title">05. 개인정보 요구</h3>
+                <span class="guide-tag">예시 보기</span>
+              </div>
               <p class="guide-item-desc">신분증 사진, 비밀번호, 일회용 인증번호, 계좌 비밀번호 입력을 요구하면 100% 의심해야 합니다.</p>
+              <div class="guide-action-pill">
+                <span>가상의 예시 이미지 보기</span>
+                <svg class="icon-arrow" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+                </svg>
+              </div>
             </article>
-            <article class="guide-item">
-              <h3 class="guide-item-title">06. 금전·송금 요구</h3>
+
+            <article class="guide-item guide-clickable" data-signal-id="06" data-signal-name="금전·송금 요구" role="button" tabindex="0" aria-haspopup="dialog">
+              <div class="guide-item-top">
+                <h3 class="guide-item-title">06. 금전·송금 요구</h3>
+                <span class="guide-tag">예시 보기</span>
+              </div>
               <p class="guide-item-desc">합의금, 수수료, 상품권 핀번호, 가족을 사칭한 긴급 송금 요청은 반드시 전화로 직접 확인하세요.</p>
+              <div class="guide-action-pill">
+                <span>가상의 예시 이미지 보기</span>
+                <svg class="icon-arrow" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+                </svg>
+              </div>
             </article>
           </div>
         </div>
@@ -583,15 +682,15 @@
             <div class="safety-col">
               <h2 id="safety-title" class="pane-title">개인정보 보호 및 안전 원칙</h2>
               <p class="state-desc">
-                ClickCheck는 사용자가 입력한 문자 내용과 전화번호·계좌번호를 서버 데이터베이스에 영구 저장하지 않습니다. 다만 안전한 보안 습관을 위해 민감한 실명, 계좌번호, 전화번호는 입력 전 개인정보 자동 마스킹 버튼을 눌러 지운 뒤 분석하시길 권장합니다.
+                ClickCheck는 사용자가 저장에 동의한 경우에만 전화번호·계좌번호·주민번호를 자동 마스킹한 비식별 텍스트(캡처 이미지에서 AI가 추출한 텍스트 포함)를 Supabase 사례 DB에 저장해 판별 정확도를 높입니다. 업로드한 원본 캡처 이미지는 DB에 저장하지 않으며, 입력 전 개인정보 마스킹 버튼을 눌러 한 번 더 지우는 것을 권장합니다.
               </p>
             </div>
             <div class="safety-col">
               <h2 class="pane-title">피해 의심 시 즉시 연락처</h2>
               <ul class="helpline-list">
-                <li><strong class="helpline-num">118</strong> · 한국인터넷진흥원(KISA) 스미싱·해킹 신고 및 상담</li>
-                <li><strong class="helpline-num">112</strong> · 경찰청 보이스피싱·사이버 범죄 신고</li>
-                <li><strong class="helpline-num">1332</strong> · 금융감독원 금융사기 피해 상담 및 지급정지 문의</li>
+                <li><strong>118</strong> · 한국인터넷진흥원(KISA) 스미싱·해킹 신고 및 상담</li>
+                <li><strong>112</strong> · 경찰청 보이스피싱·사이버 범죄 신고</li>
+                <li><strong>1332</strong> · 금융감독원 금융사기 피해 상담 및 지급정지 문의</li>
               </ul>
             </div>
           </div>
@@ -602,15 +701,128 @@
     <!-- 바닥글 -->
     <footer class="site-footer">
       <div class="container footer-inner">
-        <div class="footer-brand">
-          <span class="footer-logo">ClickCheck</span>
-          <span class="footer-tagline">신뢰할 수 있는 스마트 스미싱 판별 & 대응 훈련 솔루션</span>
-        </div>
-        <div class="footer-meta">
-          <span>참고용 판별이며 100% 정확하지 않음, 의심되면 118(KISA) 또는 112에 문의하세요.</span>
-        </div>
+        <span>ClickCheck · 신뢰할 수 있는 스미싱 판별·대응 훈련 솔루션</span>
+        <span>참고용 판별이며 100% 정확하지 않음, 의심되면 118(KISA) 또는 112에 문의</span>
       </div>
     </footer>
+
+    <!-- 6대 위험 신호 가상 예시 이미지 모달 팝업 (google/gemma-4-26b-a4b-it:free 활용) -->
+    <div
+      id="signal-sample-modal"
+      class="modal-backdrop hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="signal-modal-title"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <span id="signal-modal-badge" class="modal-signal-tag">위험 신호 01</span>
+            <h3 id="signal-modal-title" class="modal-title">01. 긴급성 압박 예시</h3>
+          </div>
+          <div class="modal-header-actions">
+            <span class="modal-model-label mono-num">google/gemma-4-26b-a4b-it:free</span>
+            <button
+              type="button"
+              id="btn-close-signal-modal"
+              class="modal-close-btn"
+              aria-label="닫기"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <div class="modal-body">
+          <!-- 로딩 상태 -->
+          <div id="signal-modal-loading" class="modal-loading-box">
+            <div class="spinner" aria-hidden="true"></div>
+            <p class="modal-loading-title">가상의 예시 이미지를 생성하고 있습니다</p>
+            <p class="modal-loading-desc">
+              <code>google/gemma-4-26b-a4b-it:free</code> 모델이 안전 규칙을 준수하는 스마트폰 수신 가상 문자 캡처 이미지를 준비 중입니다.
+            </p>
+          </div>
+
+          <!-- 에러/안내 상태 (필요 시) -->
+          <div id="signal-modal-error" class="modal-error-box hidden" role="alert">
+            <p id="signal-modal-error-msg" class="modal-error-msg"></p>
+          </div>
+
+          <!-- 콘텐츠 영역: 2단 레이아웃 (스마트폰 캡처 이미지 + 수법 해설) -->
+          <div id="signal-modal-content" class="signal-modal-split hidden">
+            <!-- 왼쪽: 스마트폰 가상 캡처 이미지 -->
+            <div class="signal-modal-img-col">
+              <div class="phone-img-frame">
+                <img
+                  id="signal-sample-img"
+                  class="signal-phone-img"
+                  src=""
+                  alt="스미싱 가상 문자 예시 이미지"
+                />
+              </div>
+              <div class="img-download-bar">
+                <button
+                  type="button"
+                  id="btn-download-signal-img"
+                  class="btn btn-secondary btn-sm"
+                >
+                  <svg class="icon-inline" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 00-1.09-1.03l-2.955 3.129V2.75z" />
+                    <path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" />
+                  </svg>
+                  가상 예시 이미지(.svg) 다운로드
+                </button>
+              </div>
+            </div>
+
+            <!-- 오른쪽: 상세 수법 및 대처 가이드 -->
+            <div class="signal-modal-info-col">
+              <div class="info-block">
+                <h4 class="info-block-title">핵심 위험 신호 표현</h4>
+                <div class="quote-box" id="signal-modal-highlight">
+                  "금일 18시까지 미확인 시 전 계좌 즉시 지급정지"
+                </div>
+              </div>
+
+              <div class="info-block">
+                <h4 class="info-block-title">수법 분석</h4>
+                <p id="signal-modal-explanation" class="info-block-desc">
+                  당일 마감, 계좌 지급정지, 즉시 구속 등 극단적 불이익을 내세워 피해자가 진위를 파악할 여유를 주지 않고 급하게 링크를 클릭하게 만드는 대표 수법입니다.
+                </p>
+              </div>
+
+              <div class="info-block">
+                <h4 class="info-block-title">수신 시 안전 대응 요령</h4>
+                <p id="signal-modal-countermeasure" class="info-block-desc safe-desc">
+                  수사기관과 공공기관은 문자로 계좌를 즉시 동결하거나 구속하겠다고 협박하지 않습니다. 문자를 무시하고 118(KISA) 또는 112로 신고하세요.
+                </p>
+              </div>
+
+              <div class="modal-footer-actions">
+                <button
+                  type="button"
+                  id="btn-regen-signal-sample"
+                  class="btn btn-primary btn-sm"
+                >
+                  <svg class="icon-inline" viewBox="0 0 16 16" fill="currentColor">
+                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                  </svg>
+                  다른 가상 예시 생성 (Gemma 4)
+                </button>
+                <button
+                  type="button"
+                  id="btn-close-signal-modal-bottom"
+                  class="btn btn-secondary btn-sm"
+                >
+                  닫기
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- 순수 바닐라 자바스크립트 모듈 연결 -->
     <script type="module" src="/script.js"></script>

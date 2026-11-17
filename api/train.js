@@ -1,6 +1,7 @@
 /**
  * Vercel 서버리스 함수: 스미싱 대응 훈련 시나리오 생성 API (/api/train)
  * - 사기 유형(기관사칭·택배·지원금·지인사칭·대출)과 난이도(쉬움·보통·어려움)에 맞는 교육용 가상 문자를 생성합니다.
+ * - Supabase에 축적된 최신 비식별 사례 패턴을 안전 규칙으로 정화해 참고 컨텍스트로 반영합니다.
  * - PRD 5.4 안전 규칙을 프롬프트와 후처리 양쪽에서 모두 검증·적용합니다.
  */
 
@@ -11,6 +12,11 @@ import {
   parseJsonBody,
   validateAndNormalizeTrainResult
 } from './_openrouter.js';
+import {
+  fetchRecentCasesByType,
+  formatTrainReferencePatterns,
+  isSupabaseConfigured
+} from './_supabase.js';
 
 // 훈련 시나리오 생성 시스템 프롬프트 (PRD 5.4, 5.5 반영)
 const TRAIN_SYSTEM_PROMPT = `당신은 한국어 스미싱 예방 교육 시나리오 출제자입니다.
@@ -69,12 +75,19 @@ export default async function handler(req, res) {
         ? body.difficulty
         : '보통';
 
-    const userPrompt = `사기 유형: "${scamType}"
-난이도: "${difficulty}"
-요청 번호: ${Date.now() % 10000}
+    // Supabase에 축적된 해당 유형 비식별 수법 사례를 최대 2건 조회해 안전하게 프롬프트에 반영
+    const recentCases = isSupabaseConfigured() ? await fetchRecentCasesByType(scamType, 2) : [];
+    const referenceBlock = formatTrainReferencePatterns(recentCases);
 
-위 조건에 맞는 새로운 교육용 가상 스미싱 문자 1건을 위 JSON 스키마로 생성해 주세요.
-다시 한 번 확인: 실제 기관명·은행명·택배사명, 실제 전화번호, 실제 도메인(example.com 제외)을 절대 넣지 마세요.`;
+    const userPrompt = [
+      `사기 유형: "${scamType}"`,
+      `난이도: "${difficulty}"`,
+      `요청 번호: ${Date.now() % 10000}`,
+      referenceBlock,
+      '위 조건에 맞는 새로운 교육용 가상 스미싱 문자 1건을 위 JSON 스키마로 생성해 주세요.\n다시 한 번 확인: 실제 기관명·은행명·택배사명, 실제 전화번호, 실제 도메인(example.com 제외)을 절대 넣지 마세요.'
+    ]
+      .filter(Boolean)
+      .join('\n\n');
 
     // 훈련 시나리오는 다양성을 위해 temperature를 약간 높게(0.65) 설정 (PRD 5.5)
     const result = await callOpenRouterJson({
@@ -93,6 +106,7 @@ export default async function handler(req, res) {
       source: 'openrouter',
       model: result.model,
       latencyMs: result.latencyMs,
+      ragUsedCount: recentCases.length,
       scenario: normalized
     });
   } catch (error) {
@@ -104,3 +118,4 @@ export default async function handler(req, res) {
     });
   }
 }
+

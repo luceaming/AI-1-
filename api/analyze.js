@@ -1,7 +1,8 @@
 /**
  * Vercel 서버리스 함수: 스미싱 의심 문자 및 캡처 이미지 판별 API (/api/analyze)
  * - 텍스트 입력(P0)과 문자 캡처 이미지 입력(P2)을 모두 지원합니다.
- * - 원문 대조 검증을 거쳐 존재하지 않는 위험 표현 하이라이트를 제거합니다.
+ * - Supabase에 누적된 과거 비식별 판별 사례를 RAG(유사 사례 참고)로 조회해 Gemma 4 프롬프트에 반영합니다.
+ * - 판별이 끝나면 텍스트 입력과 이미지에서 추출된 텍스트를 비식별 마스킹 후 Supabase에 저장합니다.
  */
 
 import crypto from 'node:crypto';
@@ -10,6 +11,15 @@ import {
   parseJsonBody,
   validateAndNormalizeAnalyzeResult
 } from './_openrouter.js';
+import {
+  computeNormalizedHash,
+  findExactCaseByHash,
+  findSimilarCases,
+  formatRagExamplesForPrompt,
+  isSupabaseConfigured,
+  sanitizeTextForStorage,
+  saveAnalyzedCase
+} from './_supabase.js';
 
 // 판별 모드 시스템 프롬프트 (PRD 5.3, 5.5 설계 원칙 반영)
 const ANALYZE_SYSTEM_PROMPT = `당신은 한국어 스미싱·보이스피싱 문자 판별 전문가입니다.
@@ -38,7 +48,7 @@ const ANALYZE_SYSTEM_PROMPT = `당신은 한국어 스미싱·보이스피싱 �
   "risk_score": 0~100 정수,
   "risk_level": "안전 | 주의 | 위험",
   "scam_type": "기관사칭 | 택배 | 지원금 | 지인사칭 | 대출 | 기타 | 해당없음",
-  "extracted_text": "텍스트 입력이면 원문 그대로, 이미지 입력이면 이미지 속 문자 내용을 정확히 옮겨 적기",
+  "extracted_text": "텍스트 입력이면 원문 그대로, 이미지 입력이면 이미지 속 문자 내용을 빠짐없이 정확히 옮겨 적기",
   "summary": "판별 이유 1~2문장 요약",
   "easy_summary": "어르신도 한눈에 이해할 수 있는 아주 쉬운 말 설명 1~2문장",
   "signals": [
@@ -71,6 +81,8 @@ export default async function handler(req, res) {
     const text = typeof body?.text === 'string' ? body.text.trim() : '';
     const imageDataUrl =
       typeof body?.imageDataUrl === 'string' ? body.imageDataUrl.trim() : '';
+    const saveToKnowledgeBase = body?.saveToKnowledgeBase !== false;
+    const skipCache = Boolean(body?.skipCache);
 
     // 텍스트와 이미지가 모두 비어 있으면 400 오류 반환
     if (!text && !imageDataUrl) {
@@ -96,17 +108,68 @@ export default async function handler(req, res) {
       });
     }
 
+    const inputType = text && imageDataUrl ? 'mixed' : imageDataUrl ? 'image' : 'text';
+    const supabaseConfigured = isSupabaseConfigured();
+
+    // 1. 순수 텍스트 입력이면 Supabase 동일 사례 캐시를 먼저 조회해 무료 AI 한도를 절약합니다.
+    if (text && !imageDataUrl && !skipCache && supabaseConfigured) {
+      const maskedInput = sanitizeTextForStorage(text);
+      const sourceHash = computeNormalizedHash(maskedInput);
+      const cachedCase = await findExactCaseByHash(sourceHash);
+
+      if (cachedCase) {
+        const normalizedCached = validateAndNormalizeAnalyzeResult(
+          {
+            ...cachedCase,
+            extracted_text: text
+          },
+          text
+        );
+
+        return res.status(200).json({
+          ok: true,
+          source: 'supabase_cache',
+          cached: true,
+          model: cachedCase.model || 'supabase-rag-cache',
+          latencyMs: 0,
+          inputType,
+          rag: {
+            usedCount: 0,
+            matchedTypes: cachedCase.scam_type ? [cachedCase.scam_type] : []
+          },
+          knowledgeBase: {
+            configured: true,
+            saved: true,
+            deduplicated: true,
+            inputType: cachedCase.input_type || inputType,
+            maskedText: cachedCase.masked_text || maskedInput
+          },
+          result: normalizedCached
+        });
+      }
+    }
+
+    // 2. Supabase에서 유사 사례(RAG)를 최대 3건 검색해 Gemma 4 참고 컨텍스트로 구성합니다.
+    const similarCases = text && supabaseConfigured ? await findSimilarCases(text, 3) : [];
+    const ragContextBlock = formatRagExamplesForPrompt(similarCases);
+
     // 멀티모달 또는 텍스트 사용자 메시지 구성
     const userContent = [];
     if (text) {
+      const promptParts = [
+        '다음 문자 메시지를 판별 스키마에 맞춰 JSON으로 분석해 주세요.',
+        ragContextBlock,
+        `[분석 대상 문자]\n${text}`
+      ].filter(Boolean);
+
       userContent.push({
         type: 'text',
-        text: `다음 문자 메시지를 판별 스키마에 맞춰 JSON으로 분석해 주세요.\n\n[분석 대상 문자]\n${text}`
+        text: promptParts.join('\n\n')
       });
     } else {
       userContent.push({
         type: 'text',
-        text: '첨부된 문자 캡처 이미지의 내용을 먼저 extracted_text에 정확히 옮겨 적은 뒤, 스미싱 위험도를 판별 스키마 JSON으로 분석해 주세요.'
+        text: '첨부된 문자 캡처 이미지의 모든 글자를 먼저 extracted_text에 빠짐없이 정확히 옮겨 적은 뒤, 스미싱 위험도를 판별 스키마 JSON으로 분석해 주세요.'
       });
     }
 
@@ -117,10 +180,11 @@ export default async function handler(req, res) {
       });
     }
 
-    // 동일 입력 캐시 키 생성 (개인정보를 서버 디스크/DB에 저장하지 않고 메모리 해시만 사용)
+    // 동일 입력 메모리 캐시 키 생성 (RAG 사례가 바뀐 경우를 반영하기 위해 rag 키 일부 포함)
+    const ragKey = similarCases.map((c) => c.id).join(',');
     const cacheHash = crypto
       .createHash('sha256')
-      .update(`${text}|${imageDataUrl.slice(0, 200)}|${imageDataUrl.length}`)
+      .update(`${text}|${imageDataUrl.slice(0, 200)}|${imageDataUrl.length}|${ragKey}`)
       .digest('hex');
 
     const result = await callOpenRouterJson({
@@ -135,12 +199,41 @@ export default async function handler(req, res) {
 
     const normalized = validateAndNormalizeAnalyzeResult(result.data, text);
 
+    // 3. 텍스트 입력 또는 캡처 이미지에서 추출된 텍스트(extracted_text)를 비식별 마스킹 후 Supabase에 저장
+    let knowledgeBase = {
+      configured: supabaseConfigured,
+      saved: false,
+      skippedReason: saveToKnowledgeBase ? 'NOT_CONFIGURED' : 'USER_OPT_OUT',
+      inputType,
+      maskedText: sanitizeTextForStorage(normalized.extracted_text || text)
+    };
+
+    if (saveToKnowledgeBase && normalized.extracted_text) {
+      knowledgeBase = {
+        inputType,
+        ...(await saveAnalyzedCase({
+          inputType,
+          rawText: normalized.extracted_text,
+          result: normalized,
+          model: result.model
+        }))
+      };
+    }
+
     return res.status(200).json({
       ok: true,
       source: 'openrouter',
       cached: result.cached,
       model: result.model,
       latencyMs: result.latencyMs,
+      inputType,
+      rag: {
+        usedCount: similarCases.length,
+        matchedTypes: Array.from(
+          new Set(similarCases.map((c) => c.scam_type).filter(Boolean))
+        )
+      },
+      knowledgeBase,
       result: normalized
     });
   } catch (error) {
@@ -152,3 +245,4 @@ export default async function handler(req, res) {
     });
   }
 }
+
